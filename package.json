@@ -1,0 +1,8 @@
+{
+  "name": "mastodon-twitter-bridge",
+  "version": "1.0.0",
+  "description": "Twitter to Mastodon bridge and vice versa",
+  "main": "index.js",
+  "author": "vanita5 <mail@vanit.as>",
+  "license": "MIT"
+}
