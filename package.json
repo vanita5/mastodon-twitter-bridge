@@ -4,5 +4,13 @@
   "description": "Twitter to Mastodon bridge and vice versa",
   "main": "index.js",
   "author": "vanita5 <mail@vanit.as>",
-  "license": "MIT"
+  "license": "MIT",
+  "scripts": {
+    "dev": "next"
+  },
+  "dependencies": {
+    "next": "^2.0.1",
+    "react": "^15.4.2",
+    "react-dom": "^15.4.2"
+  }
 }
