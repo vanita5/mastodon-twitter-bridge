@@ -6,10 +6,7 @@ import NProgress from 'nprogress'
 
 import stylesheet from 'styles/styles.scss'
 
-Router.onRouteChangeStart = url => {
-    console.log(`Loading ${url}`)
-    NProgress.start()
-}
+Router.onRouteChangeStart = () => NProgress.start()
 Router.onRouteChangeComplete = () => NProgress.done()
 Router.onRouteChangeError = () => NProgress.done()
 

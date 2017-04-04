@@ -1,8 +1,8 @@
 import Layout from '../components/Layout'
 import Navbar from '../components/Navbar'
 
-export default () => (
+export default props => (
     <Layout>
-        <Navbar active="about"/>
+        <Navbar url={props.url.pathname}/>
     </Layout>
 )

@@ -11,10 +11,10 @@ export default props => (
             <div className="menu">
                 <ul>
                     <li className="root">Menu</li>
-                    <li className={`sub ${props.active === 'index' ? 'active' : ''}`}>
+                    <li className={`sub ${props.url === '/' ? 'active' : ''}`}>
                         <Link href="/">Home</Link>
                     </li>
-                    <li className={`sub ${props.active === 'about' ? 'active' : ''}`}>
+                    <li className={`sub ${props.url === '/about' ? 'active' : ''}`}>
                         <Link href="/about">About</Link>
                     </li>
                 </ul>
