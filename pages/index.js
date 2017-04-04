@@ -1,7 +1,7 @@
-const Index = () => (
-    <div>
-        <h1>Twitter - Mastodon</h1>
-    </div>
-)
+import Layout from '../components/Layout'
 
-export default Index
+export default () => (
+    <Layout>
+        <p>Hello.</p>
+    </Layout>
+)
