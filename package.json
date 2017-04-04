@@ -9,8 +9,10 @@
     "dev": "next"
   },
   "dependencies": {
+    "mastodon-api": "^1.0.2",
     "next": "^2.0.1",
     "react": "^15.4.2",
-    "react-dom": "^15.4.2"
+    "react-dom": "^15.4.2",
+    "twit": "^2.2.5"
   }
 }
