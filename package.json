@@ -9,11 +9,15 @@
     "dev": "next"
   },
   "dependencies": {
+    "bootstrap": "4.0.0-alpha.6",
     "mastodon-api": "^1.0.2",
     "next": "^2.0.1",
     "nprogress": "^0.2.0",
     "react": "^15.4.2",
+    "react-addons-css-transition-group": "^15.4.2",
+    "react-addons-transition-group": "^15.4.2",
     "react-dom": "^15.4.2",
+    "reactstrap": "^4.5.0",
     "twit": "^2.2.5"
   }
 }

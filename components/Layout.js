@@ -19,6 +19,7 @@ export default ({ children }) => (
             <meta name='viewport' content='initial-scale=1.0, width=device-width' />
 
             <link rel="stylesheet" type="text/css" href="/static/nprogress.css"/>
+            <link rel="stylesheet" type="text/css" href="/static/bootstrap.min.css"/>
         </Head>
 
         <h1>Twitter - Mastodon</h1>
