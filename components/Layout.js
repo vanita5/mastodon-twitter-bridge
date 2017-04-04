@@ -4,6 +4,8 @@ import Router from 'next/router'
 
 import NProgress from 'nprogress'
 
+import stylesheet from 'styles/styles.scss'
+
 Router.onRouteChangeStart = url => {
     console.log(`Loading ${url}`)
     NProgress.start()
@@ -11,18 +13,9 @@ Router.onRouteChangeStart = url => {
 Router.onRouteChangeComplete = () => NProgress.done()
 Router.onRouteChangeError = () => NProgress.done()
 
-const bodyStyle = {
-    background: '#282c37',
-    minWidth: '100%',
-    paddingTop: 50,
-    paddingBottom: 50,
-    fontSize: '1rem',
-    lineHeight: 1.5,
-    color: '#cfd2da'
-}
-
 export default ({ children }) => (
-    <div style={bodyStyle}>
+    <div id="layout">
+        <style dangerouslySetInnerHTML={{ __html: stylesheet }}/>
         <Head>
             <title>Twitter - Mastodon Bridge</title>
             <meta charSet="utf-8"/>
@@ -31,8 +24,11 @@ export default ({ children }) => (
             <link rel="stylesheet" type="text/css" href="/static/nprogress.css"/>
             <link rel="stylesheet" type="text/css" href="/static/bootstrap.min.css"/>
         </Head>
-
-        <h1>Twitter - Mastodon</h1>
-        { children }
+        <div id="wrapper">
+            <div className="content">
+                <h1>Twitter - Mastodon</h1>
+                { children }
+            </div>
+        </div>
     </div>
 )
