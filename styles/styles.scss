@@ -4,6 +4,10 @@ html, body, #__next, #__next > div {
   width: 100%;
   height: 100%;
 }
+
+a {
+  text-decoration: none !important;
+}
   
 #layout {
   background: #282c37;
@@ -30,17 +34,49 @@ html, body, #__next, #__next > div {
 
 nav > .logo {
   position: relative;
-  padding-bottom: 25px;
+  padding-bottom: 75px;
 
   span {
     float: left;
     color: #393f4f;
     font-size: 45px;
     cursor: pointer;
+    position: absolute;
   }
 
   span:hover {
-    color: #9baec8;
+    color: #57657d;
+  }
+}
+
+nav > .menu {
+  ul {
+    display: flex;
+    flex-direction: column;
+    padding-left: 0;
+    list-style: none;
+    line-height: 1.9rem;
+
+    li a {
+      color: #babdc5;
+    }
+    li a:hover {
+      color: #eff2fa;
+    }
+
+    li.root {
+      font-size: 80%;
+      color: #52596b;
+      text-transform: uppercase;
+    }
+    li.sub {
+      border-radius: 0.25rem;
+    }
+  }
+  hr {
+    margin: 1rem 0 30px;
+    border: 0;
+    border-top: 1px solid #454a59;
   }
 }
 
