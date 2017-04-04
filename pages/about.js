@@ -3,6 +3,6 @@ import Navbar from '../components/Navbar'
 
 export default () => (
     <Layout>
-        <Navbar active="index"/>
+        <Navbar active="about"/>
     </Layout>
 )

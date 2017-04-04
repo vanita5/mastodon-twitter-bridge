@@ -57,6 +57,10 @@ nav > .menu {
     list-style: none;
     line-height: 1.9rem;
 
+    li {
+      padding: 5px 15px;
+    }
+
     li a {
       color: #babdc5;
     }
@@ -71,6 +75,12 @@ nav > .menu {
     }
     li.sub {
       border-radius: 0.25rem;
+    }
+    li.active {
+      background-color: #2aabd2;
+      a {
+        color: black;
+      }
     }
   }
   hr {

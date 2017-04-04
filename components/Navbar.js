@@ -2,7 +2,7 @@ import Link from 'next/link'
 
 import Icon from 'react-icon'
 
-export default () => (
+export default props => (
     <div className="navbar-wrapper">
         <nav>
             <div className="logo">
@@ -11,10 +11,10 @@ export default () => (
             <div className="menu">
                 <ul>
                     <li className="root">Menu</li>
-                    <li className="sub">
+                    <li className={`sub ${props.active === 'index' ? 'active' : ''}`}>
                         <Link href="/">Home</Link>
                     </li>
-                    <li className="sub">
+                    <li className={`sub ${props.active === 'about' ? 'active' : ''}`}>
                         <Link href="/about">About</Link>
                     </li>
                 </ul>
