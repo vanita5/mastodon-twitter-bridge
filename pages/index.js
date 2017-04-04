@@ -1,9 +1,8 @@
 import Layout from '../components/Layout'
-import { Button } from 'reactstrap'
+import Navbar from '../components/Navbar'
 
 export default () => (
     <Layout>
-        <p>Hello.</p>
-        <Button color="danger">Danger!</Button>
+        <Navbar/>
     </Layout>
 )

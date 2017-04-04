@@ -21,12 +21,12 @@ export default ({ children }) => (
             <meta charSet="utf-8"/>
             <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
 
-            <link rel="stylesheet" type="text/css" href="/static/nprogress.css"/>
-            <link rel="stylesheet" type="text/css" href="/static/bootstrap.min.css"/>
+            <link rel="stylesheet" type="text/css" href="/static/css/nprogress.css"/>
+            <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css"/>
+            <link rel="stylesheet" type="text/css" href="/static/css/font-awesome.min.css"/>
         </Head>
         <div id="wrapper">
             <div className="content">
-                <h1>Twitter - Mastodon</h1>
                 { children }
             </div>
         </div>

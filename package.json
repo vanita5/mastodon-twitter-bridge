@@ -27,6 +27,7 @@
     "react-addons-css-transition-group": "^15.4.2",
     "react-addons-transition-group": "^15.4.2",
     "react-dom": "^15.4.2",
+    "react-icon": "^1.0.0",
     "reactstrap": "^4.5.0",
     "sass-loader": "^6.0.3",
     "twit": "^2.2.5"

@@ -8,8 +8,16 @@
   #wrapper {
     width: 950px;
   }
+
+
+  .content > .navbar-wrapper > nav {
+    margin-right: 40px;
+  }
 }
 
 @media (min-width: 768px) {
-
+  .content > .navbar-wrapper {
+    flex: 0 0 25%;
+    max-width: 25%;
+  }
 }

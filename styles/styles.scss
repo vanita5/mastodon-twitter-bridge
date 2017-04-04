@@ -25,4 +25,22 @@ html, body, #__next, #__next > div {
 
 #wrapper > .content {
   display: flex;
+  flex-wrap: wrap;
 }
+
+nav > .logo {
+  position: relative;
+  padding-bottom: 25px;
+
+  span {
+    float: left;
+    color: #393f4f;
+    font-size: 45px;
+    cursor: pointer;
+  }
+
+  span:hover {
+    color: #9baec8;
+  }
+}
+
