@@ -1,6 +1,8 @@
 import Layout from '../components/Layout'
+import Header from '../components/Header'
 
-export default props => (
-        <Layout>
-        </Layout>
-    )
+export default () => (
+    <Layout>
+        <Header/>
+    </Layout>
+)

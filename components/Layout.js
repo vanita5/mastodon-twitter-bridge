@@ -2,6 +2,8 @@ import Head from 'next/head'
 import Link from 'next/link'
 import Router from 'next/router'
 
+import { Container } from 'reactstrap'
+
 import NProgress from 'nprogress'
 
 import stylesheet from 'styles/styles.scss'
@@ -22,10 +24,8 @@ export default ({ children }) => (
             <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css"/>
             <link rel="stylesheet" type="text/css" href="/static/css/font-awesome.min.css"/>
         </Head>
-        <div id="wrapper">
-            <div className="content">
-                { children }
-            </div>
-        </div>
+        <Container id="wrapper">
+            { children }
+        </Container>
     </div>
 )

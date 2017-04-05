@@ -8,3 +8,29 @@ html, body, #__next, #__next > div {
 a {
   text-decoration: none !important;
 }
+
+.btn > p {
+  margin: 0;
+}
+
+#layout {
+  background: #282c37;
+  min-width: 100%;
+  min-height: 100%;
+  padding-top: 50px;
+  padding-bottom: 50px;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #cfd2da
+}
+
+.img-responsive {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+#header {
+  text-align: center;
+}
+
