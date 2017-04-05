@@ -1,5 +1,7 @@
 import Link from 'next/link'
 
+import Title from './Title'
+
 import { Row, Col, Button } from 'reactstrap'
 
 const buttonStyle = {
@@ -15,9 +17,7 @@ export default () => (
         </Row>
         <Row style={{ marginTop: 25 }}>
             <Col lg="12">
-                <h1>Mastodon - Twitter</h1>
-                <br/>
-                <p>Write a Toot and let it be tweeted automatically. And vice versa.</p>
+                <Title/>
             </Col>
         </Row>
         <Row style={{ marginTop: 100 }}>
