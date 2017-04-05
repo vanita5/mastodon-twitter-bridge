@@ -8,27 +8,3 @@ html, body, #__next, #__next > div {
 a {
   text-decoration: none !important;
 }
-  
-#layout {
-  background: #282c37;
-  min-width: 100%;
-  min-height: 100%;
-  padding-top: 50px;
-  padding-bottom: 50px;
-  font-size: 1rem;
-  line-height: 1.5;
-  color: #cfd2da
-}
-  
-#wrapper {
-  position: relative;
-  max-width: 100%;
-  padding: 0 20px;
-  margin: 0 auto;
-}
-
-#wrapper > .content {
-  display: flex;
-  flex-wrap: wrap;
-}
-
