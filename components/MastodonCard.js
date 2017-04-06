@@ -13,7 +13,7 @@ const cardStyle = {
     margin: '0 auto'
 }
 
-export default () => (
+export default props => (
     <Card style={cardStyle}>
         <CardImg
             top
@@ -22,7 +22,7 @@ export default () => (
             alt="Mastodon" />
         <CardBlock>
             <CardTitle>Mastodon</CardTitle>
-            <CardSubtitle>Not yet connected.</CardSubtitle>
+            <CardSubtitle>{props.authorized ? `Authorized!` : `Not yet connected.`}</CardSubtitle>
             <CardText>Please authorize with Mastodon.</CardText>
             <Button>Authorize</Button>
         </CardBlock>
