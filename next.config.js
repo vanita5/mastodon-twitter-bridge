@@ -8,6 +8,16 @@ module.exports = {
     webpack: (config, { dev }) => {
         config.module.rules.push(
             {
+                enforce: 'pre',
+                test: /\.js$/,
+                exclude: /node_modules/,
+                loader: 'eslint-loader',
+                options: {
+                    failOnError: true,
+                    failOnWarning: true
+                }
+            },
+            {
                 test: /\.(css|scss|sass)/,
                 loader: 'emit-file-loader',
                 options: {
