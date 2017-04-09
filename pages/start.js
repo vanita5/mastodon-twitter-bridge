@@ -1,8 +1,9 @@
-import Layout from '../components/Layout'
-import Description from '../components/Description'
+// @flow
+import Description from '../components/Description';
+import Layout from '../components/Layout';
 
 export default () => (
     <Layout>
-        <Description/>
+        <Description />
     </Layout>
-)
+);

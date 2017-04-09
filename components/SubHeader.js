@@ -1,14 +1,19 @@
-import Title from "./Title";
+// @flow
+import { Col, Row } from 'reactstrap';
+import Title from './Title';
 
-import { Row, Col } from "reactstrap";
-
-export default () => (
+const SubHeader = () => (
     <Row>
         <Col lg="2">
-            <img className="img-responsive" style={{ width: 120 }} src="/static/img/mastodon.png" />
+            <img
+                className="img-responsive"
+                style={{ width: 120 }}
+                src="/static/img/mastodon.png"/>
         </Col>
         <Col lg="10" style={{ padding: 10 }}>
-            <Title/>
+            <Title />
         </Col>
     </Row>
-)
+);
+
+export default SubHeader;

@@ -34,6 +34,8 @@
     "twit": "^2.2.5"
   },
   "devDependencies": {
-    "babel-plugin-css-modules-transform": "^1.2.7"
+    "babel-plugin-css-modules-transform": "^1.2.7",
+    "eslint": "^3.19.0",
+    "eslint-config-marudor": "^4.2.0"
   }
 }

@@ -1,23 +1,25 @@
-import Link from 'next/link'
-
-import Title from './Title'
-
-import { Row, Col, Button } from 'reactstrap'
+// @flow
+import { Button, Col, Row } from 'reactstrap';
+import Link from 'next/link';
+import Title from './Title';
 
 const buttonStyle = {
-    cursor: 'pointer'
-}
+  cursor: 'pointer',
+};
 
-export default () => (
+const Header = () => (
     <div id="header">
         <Row>
             <Col lg="12">
-                <img className="img-responsive" style={{ margin: '0 auto' }} src="/static/img/mastodon.png"/>
+                <img
+                    className="img-responsive"
+                    style={{ margin: '0 auto' }}
+                    src="/static/img/mastodon.png"/>
             </Col>
         </Row>
         <Row style={{ marginTop: 25 }}>
             <Col lg="12">
-                <Title/>
+                <Title />
             </Col>
         </Row>
         <Row style={{ marginTop: 100 }}>
@@ -28,4 +30,6 @@ export default () => (
             </Col>
         </Row>
     </div>
-)
+);
+
+export default Header;
