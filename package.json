@@ -2,19 +2,19 @@
   "name": "mastodon-twitter-bridge",
   "version": "1.0.0",
   "description": "Twitter to Mastodon bridge and vice versa",
-  "main": "index.js",
   "author": "vanita5 <mail@vanit.as>",
   "license": "MIT",
   "scripts": {
-    "start": "next",
+    "start": "NODE_ENV=production node server.js",
     "build": "next build",
-    "dev": "next dev"
+    "dev": "node server.js"
   },
   "dependencies": {
     "autoprefixer": "^6.7.7",
     "babel-plugin-module-resolver": "^2.7.0",
     "babel-plugin-wrap-in-js": "^1.1.1",
     "bootstrap": "4.0.0-alpha.6",
+    "express": "^4.15.2",
     "glob": "^7.1.1",
     "mastodon-api": "^1.0.2",
     "nedb": "^1.8.0",
