@@ -2,7 +2,9 @@
 const path = require('path');
 const glob = require('glob');
 
-module.exports = { /*eslint no-unused-vars: 0*/
+module.exports = {
+    /*eslint no-unused-vars: 0*/
+    // $FlowFixMe
     webpack: (config, { dev }) => {
         config.module.rules.push(
             {
@@ -18,15 +20,19 @@ module.exports = { /*eslint no-unused-vars: 0*/
             },
             {
                 test: /\.s(a|c)ss$/,
-                use: ['babel-loader', 'raw-loader', 'postcss-loader',
-                    { loader: 'sass-loader',
+                use: [
+                    'babel-loader',
+                    'raw-loader',
+                    'postcss-loader',
+                    {
+                        loader: 'sass-loader',
                         options: {
                             includePaths: ['styles', 'node_modules']
-                                .map((d) => path.join(__dirname, d))
-                                .map((g) => glob.sync(g))
+                                .map(d => path.join(__dirname, d))
+                                .map(g => glob.sync(g))
                                 .reduce((a, c) => a.concat(c), []),
                         },
-                    },
+                    }
                 ],
             }
         );

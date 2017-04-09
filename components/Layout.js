@@ -10,7 +10,7 @@ Router.onRouteChangeComplete = () => NProgress.done();
 Router.onRouteChangeError = () => NProgress.done();
 
 type Props = {
-  children?: ReactChildren,
+    children?: ReactChildren,
 };
 
 const Layout = ({ children }: Props) => (
@@ -23,7 +23,10 @@ const Layout = ({ children }: Props) => (
                 name="viewport"
                 content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
 
-            <link rel="stylesheet" type="text/css" href="/static/css/nprogress.css" />
+            <link
+                rel="stylesheet"
+                type="text/css"
+                href="/static/css/nprogress.css"/>
             <link
                 rel="stylesheet"
                 type="text/css"

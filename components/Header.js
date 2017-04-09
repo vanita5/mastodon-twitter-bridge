@@ -4,7 +4,7 @@ import Link from 'next/link';
 import Title from './Title';
 
 const buttonStyle = {
-  cursor: 'pointer',
+    cursor: 'pointer',
 };
 
 const Header = () => (
