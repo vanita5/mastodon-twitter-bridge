@@ -1,4 +1,5 @@
 // @flow
+import auth from './auth/routes';
 import express from 'express';
 import next from 'next';
 
@@ -10,8 +11,19 @@ const handle = app.getRequestHandler();
 app.prepare().then(() => {
     const server = express();
 
-    //$FlowFixMe
-    server.get('*', (req, res) => handle(req, res));
+    server
+        .route([
+            '*.*',
+            '/_next*',
+            '/__webpack*',
+            '/',
+            '/index',
+            '/start',
+            '/about',
+        ])
+        .get((req, res) => handle(req, res));
+
+    server.use('/auth', auth);
 
     server.listen(3000, err => {
         if (err) {

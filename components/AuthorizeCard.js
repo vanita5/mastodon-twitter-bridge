@@ -1,24 +1,17 @@
 // @flow
 
-import {
-    Button,
-    Card,
-    CardBlock,
-    CardSubtitle,
-    CardText,
-    CardTitle,
-} from 'reactstrap';
+import { Card, CardBlock, CardSubtitle, CardText, CardTitle } from 'reactstrap';
 
 type Props = {
     serviceName: string,
     authorized: boolean,
-    authorize: Function,
+    authLink: string,
     backColor: string,
     img: string,
 };
 
 const AuthorizeCard = (
-    { serviceName, authorized, authorize, backColor, img }: Props,
+    { serviceName, authorized, authLink, backColor, img }: Props,
 ) => (
     <Card style={style.card}>
         <div style={style.image(img, backColor)} className="card-img-top" />
@@ -28,7 +21,7 @@ const AuthorizeCard = (
                 {authorized ? 'Authorized!' : 'Not yet connected.'}
             </CardSubtitle>
             <CardText>{`Please authorize with ${serviceName}.`}</CardText>
-            <Button onClick={authorize}>Authorize</Button>
+            <a className="btn btn-secondary" href={authLink}>Authorize</a>
         </CardBlock>
     </Card>
 );
@@ -37,7 +30,7 @@ export default AuthorizeCard;
 const style = {
     card: {
         width: 400,
-        margin: '0 auto',
+        margin: '15px auto',
     },
     image: (src, backgroundColor) => ({
         display: 'inline-block',

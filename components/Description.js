@@ -51,7 +51,7 @@ export default class Description extends React.PureComponent {
                     <Col lg="6" xs="12">
                         <AuthorizeCard
                             serviceName="Twitter"
-                            authorize={() => {}} // TODO
+                            authLink="/auth/twitter"
                             backColor="#1da1f2"
                             img="twitter_card_logo.svg"
                             authorized={this.state.twitterAuthorized}/>
@@ -59,7 +59,7 @@ export default class Description extends React.PureComponent {
                     <Col lg="6" xs="12">
                         <AuthorizeCard
                             serviceName="Mastodon"
-                            authorize={() => {}} // TODO
+                            authLink="/auth/mastodon"
                             backColor="#282c37"
                             img="mastodon_card_logo.png"
                             authorized={this.state.mastodonAuthorized}/>
