@@ -12,6 +12,12 @@
       "cwd": "babelrc"
     }],
     [
+      "transform-es2015-modules-commonjs",
+      {
+        "loose": true,
+      }
+    ],
+    [
       "wrap-in-js", {
         "extensions": ["css$", "scss$"]
       }
