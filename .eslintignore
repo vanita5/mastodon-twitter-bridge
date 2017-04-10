@@ -1,2 +1,4 @@
 node_modules/**/*
+flow-typed/
 next.config.js
+postcss.config.js
