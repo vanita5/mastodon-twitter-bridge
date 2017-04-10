@@ -6,8 +6,7 @@
   "license": "MIT",
   "scripts": {
     "start": "NODE_ENV=production node build/index.js",
-    "build": "next build",
-    "serverbuild": "babel server --out-dir build --copy-files --source-maps",
+    "build": "babel server --out-dir build --copy-files && next build",
     "dev": "babel server --out-dir build --watch --copy-files & nodemon --watch build --exec 'node build/index.js'"
   },
   "dependencies": {
