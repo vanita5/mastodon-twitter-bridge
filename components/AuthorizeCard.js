@@ -29,19 +29,20 @@ const AuthorizeCard = ({ serviceName, authLink, backColor, img, allowCustomInsta
             </CardSubtitle>
             <CardText>{`Please authorize with ${serviceName}.`}</CardText>
             <form action={authLink} method="get">
-                {allowCustomInstance &&
-                    <div>
+                <div style={style.customInstance}>
+                    {allowCustomInstance &&
                         <InputGroup size="sm">
                             <InputGroupAddon>Mastodon instance</InputGroupAddon>
                             <Input name="instanceUrl" defaultValue="mastodon.social" />
-                        </InputGroup>
-                        <br />
-                    </div>}
-                <div>
-                    <input type="checkbox" name="ro" id={`ro-${serviceName}`} />
-                    <label htmlFor={`ro-${serviceName}`}>Read-Only</label>
+                        </InputGroup>}
                 </div>
-                <button style={style.firstButton} className="btn btn-primary" type="submit">Authorize</button>
+                <div style={style.authRow}>
+                    <button style={style.firstButton} className="btn btn-primary" type="submit">
+                        Authorize
+                    </button>
+                    <input type="checkbox" name="ro" id={`ro-${serviceName}`} />
+                    <label style={style.roLabel} htmlFor={`ro-${serviceName}`}>Read-Only</label>
+                </div>
             </form>
         </CardBlock>
     </Card>
@@ -63,7 +64,19 @@ const style = {
         backgroundSize: 'contain',
         backgroundColor,
     }),
+    customInstance: {
+        height: 40,
+    },
+    authRow: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
     firstButton: {
         marginRight: 15,
+    },
+    roLabel: {
+        marginLeft: 5,
+        marginBottom: 0,
     },
 };
