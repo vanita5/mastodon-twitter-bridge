@@ -5,6 +5,7 @@ import { accessToken as twitterAccessToken, requestToken as twitterRequestToken 
 import express from 'express';
 import notify from '../notify';
 import Twit from 'twit';
+import Mastodon from 'mastodon-api';
 
 const auth = express.Router();
 
@@ -56,12 +57,30 @@ auth.route('/twitter/redirect').get(async (req, res) => {
 });
 
 // mastodon auth
-auth.route('/mastodon').get((req, res) => {
-    res.redirect(302, notify('130'));
+auth.route('/mastodon').get(async (req, res) => {
+    const clientId = process.env.MASTODON_CLIENT_ID;
+    const clientSecret = process.env.MASTODON_CLIENT_SECRET;
+    const baseURL = process.env.BASE_URL;
+    if (!clientId || !clientSecret || !baseURL) {
+        res.redirect(302, notify('120'));
+        return;
+    }
+    const { ro, instanceUrl } = req.query;
+    //FIXME looks like Mastodon doesn't allow localhost as the redirect uri
+    const url = await Mastodon.getAuthorizationUrl(
+        clientId,
+        clientSecret,
+        `https://${instanceUrl}`,
+        `read${ro ? '' : ' write follow'}`,
+        `${baseURL}/auth/mastodon/redirect`
+    );
+    res.redirect(302, url);
 });
 
 auth.route('/mastodon/redirect').get((req, res) => {
-    res.redirect(302, notify('130'));
+    const clientId = process.env.MASTODON_CLIENT_ID;
+    const clientSecret = process.env.MASTODON_CLIENT_SECRET;
+    console.log(req.query);
 });
 
 export default auth;

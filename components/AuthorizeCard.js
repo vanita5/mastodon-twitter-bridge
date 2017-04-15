@@ -1,6 +1,6 @@
 // @flow
 
-import { Card, CardBlock, CardSubtitle, CardText, CardTitle } from 'reactstrap';
+import { Card, CardBlock, CardSubtitle, CardText, CardTitle, Input, InputGroup, InputGroupAddon } from 'reactstrap';
 
 type Props = {
     serviceName: string,
@@ -8,21 +8,34 @@ type Props = {
     authLink: string,
     backColor: string,
     img: string,
+    allowCustomInstance: boolean,
 };
 
-const AuthorizeCard = ({ serviceName, authorized, authLink, backColor, img }: Props) => (
+const AuthorizeCard = ({ serviceName, authorized, authLink, backColor, img, allowCustomInstance }: Props) => (
     <Card style={style.card}>
-        <div style={style.image(img, backColor)} className="card-img-top" />
+        <div style={style.image(img, backColor)} className="card-img-top"/>
         <CardBlock>
             <CardTitle>{serviceName}</CardTitle>
             <CardSubtitle>
                 {authorized ? 'Authorized!' : 'Not yet connected.'}
             </CardSubtitle>
             <CardText>{`Please authorize with ${serviceName}.`}</CardText>
-            <div>
-                <a style={style.firstButton} className="btn btn-primary" href={authLink}>Authorize</a>
-                <a className="btn btn-secondary" href={`${authLink}?ro=true`}>Read-Only</a>
-            </div>
+            <form action={authLink} method="get">
+                {allowCustomInstance &&
+                    <div>
+                        <InputGroup size="sm">
+                            <InputGroupAddon>Mastodon instance</InputGroupAddon>
+                            <Input name="instanceUrl" defaultValue="mastodon.social"/>
+                        </InputGroup>
+                        <br/>
+                    </div>
+                }
+                <div>
+                    <input type="checkbox" name="ro" id={`ro-${serviceName}`}/>
+                    <label htmlFor={`ro-${serviceName}`}>Read-Only</label>
+                </div>
+                <button style={style.firstButton} className="btn btn-primary" type="submit">Authorize</button>
+            </form>
         </CardBlock>
     </Card>
 );

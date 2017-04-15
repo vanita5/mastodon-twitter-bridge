@@ -60,7 +60,8 @@ export default class Description extends React.PureComponent {
                             authLink="/auth/mastodon"
                             backColor="#292326"
                             img="mastodon_card_logo.png"
-                            authorized={this.state.mastodonAuthorized}/>
+                            authorized={this.state.mastodonAuthorized}
+                            allowCustomInstance/>
                     </Col>
                 </Row>
             </div>
