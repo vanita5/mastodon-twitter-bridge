@@ -1,45 +1,22 @@
 // @flow
 import { Col, Row } from 'reactstrap';
+import { Map } from 'immutable';
 import AuthorizeCard from './AuthorizeCard';
-import DatabaseWrapper from '../lib/DatabaseWrapper';
 import React from 'react';
 import SubHeader from './SubHeader';
 
-type State = {
-    twitterAuthorized: boolean,
-    mastodonAuthorized: boolean,
+type Props = {
+    twitterAccounts?: Map<string, Object>,
+    mastodonAccounts?: Map<string, Object>,
 };
 
 export default class Description extends React.PureComponent {
-    db: DatabaseWrapper = new DatabaseWrapper();
-    state: State = {
-        twitterAuthorized: false,
-        mastodonAuthorized: false,
-    };
+    props: Props;
+    //db: DatabaseWrapper = new DatabaseWrapper();
 
-    componentWillMount() {
-        this.getAuthorization();
-    }
-
-    getAuthorization() {
-        this.db.getAuthorization().catch(err => console.log(err)).then(docs => {
-            console.log(docs);
-            docs.forEach(doc => {
-                if (!doc.service) {
-                    return;
-                }
-                if (doc.service === 'twitter') {
-                    this.setState({
-                        twitterAuthorized: doc.access_token && doc.access_token.length > 0,
-                    });
-                } else if (doc.service === 'mastodon') {
-                    this.setState({
-                        mastodonAuthorized: doc.access_token && doc.access_token.length > 0,
-                    });
-                }
-            });
-        });
-    }
+    // getInitialProps() {
+    // TODO, load account database from server
+    // }
 
     render() {
         return (
@@ -51,8 +28,7 @@ export default class Description extends React.PureComponent {
                             serviceName="Twitter"
                             authLink="/auth/twitter"
                             backColor="#1da1f2"
-                            img="twitter_card_logo.svg"
-                            authorized={this.state.twitterAuthorized}/>
+                            img="twitter_card_logo.svg"/>
                     </Col>
                     <Col lg="6" xs="12">
                         <AuthorizeCard
@@ -60,7 +36,6 @@ export default class Description extends React.PureComponent {
                             authLink="/auth/mastodon"
                             backColor="#292326"
                             img="mastodon_card_logo.png"
-                            authorized={this.state.mastodonAuthorized}
                             allowCustomInstance/>
                     </Col>
                 </Row>

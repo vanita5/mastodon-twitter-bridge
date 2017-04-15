@@ -4,20 +4,19 @@ import { Card, CardBlock, CardSubtitle, CardText, CardTitle, Input, InputGroup, 
 
 type Props = {
     serviceName: string,
-    authorized: boolean,
     authLink: string,
     backColor: string,
     img: string,
     allowCustomInstance: boolean,
 };
 
-const AuthorizeCard = ({ serviceName, authorized, authLink, backColor, img, allowCustomInstance }: Props) => (
+const AuthorizeCard = ({ serviceName, authLink, backColor, img, allowCustomInstance }: Props) => (
     <Card style={style.card}>
         <div style={style.image(img, backColor)} className="card-img-top"/>
         <CardBlock>
             <CardTitle>{serviceName}</CardTitle>
             <CardSubtitle>
-                {authorized ? 'Authorized!' : 'Not yet connected.'}
+                {'Not yet connected.'}
             </CardSubtitle>
             <CardText>{`Please authorize with ${serviceName}.`}</CardText>
             <form action={authLink} method="get">

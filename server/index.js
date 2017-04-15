@@ -1,4 +1,5 @@
 // @flow
+import { middleware as sessionMiddleware } from './sessions';
 import auth from './auth/routes';
 import express from 'express';
 import next from 'next';
@@ -11,8 +12,10 @@ const handle = app.getRequestHandler();
 app.prepare().then(() => {
     const server = express();
 
+    server.use(sessionMiddleware);
+
     server
-        .route(['*.*', '/_next*', '/__webpack*', '/', '/index', '/start', '/about'])
+        .route(['*.*', '/_next*', '/__webpack*', '/', '/index', '/about', '/start'])
         .get((req, res) => handle(req, res));
 
     server.use('/auth', auth);
