@@ -1,18 +1,27 @@
 // @flow
 
-import { Card, CardBlock, CardSubtitle, CardText, CardTitle, Input, InputGroup, InputGroupAddon } from 'reactstrap';
+import {
+    Card,
+    CardBlock,
+    CardSubtitle,
+    CardText,
+    CardTitle,
+    Input,
+    InputGroup,
+    InputGroupAddon,
+} from 'reactstrap';
 
 type Props = {
     serviceName: string,
     authLink: string,
     backColor: string,
     img: string,
-    allowCustomInstance: boolean,
+    allowCustomInstance?: boolean,
 };
 
 const AuthorizeCard = ({ serviceName, authLink, backColor, img, allowCustomInstance }: Props) => (
     <Card style={style.card}>
-        <div style={style.image(img, backColor)} className="card-img-top"/>
+        <div style={style.image(img, backColor)} className="card-img-top" />
         <CardBlock>
             <CardTitle>{serviceName}</CardTitle>
             <CardSubtitle>
@@ -24,13 +33,12 @@ const AuthorizeCard = ({ serviceName, authLink, backColor, img, allowCustomInsta
                     <div>
                         <InputGroup size="sm">
                             <InputGroupAddon>Mastodon instance</InputGroupAddon>
-                            <Input name="instanceUrl" defaultValue="mastodon.social"/>
+                            <Input name="instanceUrl" defaultValue="mastodon.social" />
                         </InputGroup>
-                        <br/>
-                    </div>
-                }
+                        <br />
+                    </div>}
                 <div>
-                    <input type="checkbox" name="ro" id={`ro-${serviceName}`}/>
+                    <input type="checkbox" name="ro" id={`ro-${serviceName}`} />
                     <label htmlFor={`ro-${serviceName}`}>Read-Only</label>
                 </div>
                 <button style={style.firstButton} className="btn btn-primary" type="submit">Authorize</button>
