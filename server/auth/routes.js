@@ -58,29 +58,33 @@ auth.route('/twitter/redirect').get(async (req, res) => {
 
 // mastodon auth
 auth.route('/mastodon').get(async (req, res) => {
-    const clientId = process.env.MASTODON_CLIENT_ID;
-    const clientSecret = process.env.MASTODON_CLIENT_SECRET;
     const baseURL = process.env.BASE_URL;
-    if (!clientId || !clientSecret || !baseURL) {
+    if (!baseURL) {
         res.redirect(302, notify('120'));
         return;
     }
+
     const { ro, instanceUrl } = req.query;
-    //FIXME looks like Mastodon doesn't allow localhost as the redirect uri
+    const { client_id, client_secret } = await Mastodon.createOAuthApp(
+        `https://${instanceUrl}/api/v1/apps`,
+        'mastodon-twitter-bridge',
+        `read${ro ? '' : ' write follow'}`,
+        `${baseURL}/auth/mastodon/redirect`
+    );
     const url = await Mastodon.getAuthorizationUrl(
-        clientId,
-        clientSecret,
+        client_id,
+        client_secret,
         `https://${instanceUrl}`,
         `read${ro ? '' : ' write follow'}`,
         `${baseURL}/auth/mastodon/redirect`
     );
+    authPending = authPending.set(client_id, client_secret);
     res.redirect(302, url);
 });
 
-auth.route('/mastodon/redirect').get((req, res) => {
-    const clientId = process.env.MASTODON_CLIENT_ID;
-    const clientSecret = process.env.MASTODON_CLIENT_SECRET;
-    console.log(req.query);
+auth.route('/mastodon/redirect').get(async (req, res) => {
+    const { code } = req.query;
+    //FIXME now we lost refernce to client_id and client_secret...
 });
 
 export default auth;
