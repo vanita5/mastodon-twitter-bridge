@@ -58,7 +58,7 @@ export default class Description extends React.PureComponent {
                         <AuthorizeCard
                             serviceName="Mastodon"
                             authLink="/auth/mastodon"
-                            backColor="#282c37"
+                            backColor="#292326"
                             img="mastodon_card_logo.png"
                             authorized={this.state.mastodonAuthorized}/>
                     </Col>
