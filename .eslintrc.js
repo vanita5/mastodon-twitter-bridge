@@ -19,5 +19,16 @@ module.exports = {
         'react/no-danger': 0,
         'no-empty-function': 0,
         'no-console': 0,
+        'max-len': [0, 110],
+        'comma-dangle': [
+            2,
+            {
+                arrays: 'always-multiline',
+                objects: 'always-multiline',
+                imports: 'always-multiline',
+                exports: 'always-multiline',
+                functions: 'never',
+            },
+        ],
     },
 };
