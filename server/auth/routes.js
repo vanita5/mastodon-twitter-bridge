@@ -19,9 +19,11 @@ auth.route('/twitter').get(async (req, res) => {
         res.redirect(302, notify('120'));
         return;
     }
+    const { ro } = req.query;
     const { token, secret, url } = await twitterRequestToken(
         consumerKey,
         consumerSecret,
+        Boolean(ro),
         `${baseURL}/auth/twitter/redirect`
     );
     authPending = authPending.set(token, secret);
@@ -32,11 +34,11 @@ auth.route('/twitter/redirect').get(async (req, res) => {
     const consumerSecret = process.env.TWITTER_CONSUMER_SECRET;
     const { oauth_token, oauth_verifier } = req.query;
     if (!consumerKey || !consumerSecret) {
-        res.redirect(302, notify('110'));
+        res.redirect(302, notify('120'));
         return;
     }
     if (!oauth_token || !oauth_verifier) {
-        res.redirect(302, notify('120'));
+        res.redirect(302, notify('110'));
         return;
     }
     const reqSecret = authPending.get(oauth_token);

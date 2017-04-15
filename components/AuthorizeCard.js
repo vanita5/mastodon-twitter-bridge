@@ -19,7 +19,10 @@ const AuthorizeCard = ({ serviceName, authorized, authLink, backColor, img }: Pr
                 {authorized ? 'Authorized!' : 'Not yet connected.'}
             </CardSubtitle>
             <CardText>{`Please authorize with ${serviceName}.`}</CardText>
-            <a className="btn btn-secondary" href={authLink}>Authorize</a>
+            <div>
+                <a style={style.firstButton} className="btn btn-primary" href={authLink}>Authorize</a>
+                <a className="btn btn-secondary" href={`${authLink}?ro=true`}>Read-Only</a>
+            </div>
         </CardBlock>
     </Card>
 );
@@ -40,4 +43,7 @@ const style = {
         backgroundSize: 'contain',
         backgroundColor,
     }),
+    firstButton: {
+        marginRight: 15,
+    },
 };

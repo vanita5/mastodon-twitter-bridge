@@ -10,6 +10,7 @@ type RequestTokenResult = {
 export const requestToken = async (
     consumerKey: string,
     consumerSecret: string,
+    readOnly: ?boolean,
     callbackUrl: string
 ): Promise<RequestTokenResult> => {
     const oauth = new OAuth(
@@ -26,12 +27,17 @@ export const requestToken = async (
         token,
         secret,
     } = await new Promise((resolve, reject) => {
-        oauth.getOAuthRequestToken((error, token, secret, results) => {
-            if (error || !results.oauth_callback_confirmed === 'true') {
-                reject();
+        oauth.getOAuthRequestToken(
+            {
+                x_auth_access_type: readOnly ? 'read' : 'write',
+            },
+            (error, token, secret, results) => {
+                if (error || !results.oauth_callback_confirmed === 'true') {
+                    reject();
+                }
+                resolve({ token, secret });
             }
-            resolve({ token, secret });
-        });
+        );
     });
     return {
         url: `https://twitter.com/oauth/authorize?oauth_token=${token}`,
