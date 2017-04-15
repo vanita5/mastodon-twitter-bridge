@@ -71,20 +71,47 @@ auth.route('/mastodon').get(async (req, res) => {
         `read${ro ? '' : ' write follow'}`,
         `${baseURL}/auth/mastodon/redirect`
     );
+    if (!client_id || !client_secret) {
+        res.redirect(302, notify('111'));
+        return;
+    }
+
     const url = await Mastodon.getAuthorizationUrl(
         client_id,
         client_secret,
         `https://${instanceUrl}`,
         `read${ro ? '' : ' write follow'}`,
-        `${baseURL}/auth/mastodon/redirect`
+        `${baseURL}/auth/mastodon/redirect?mclient_id=${client_id}&instance_url=${instanceUrl}`
     );
     authPending = authPending.set(client_id, client_secret);
     res.redirect(302, url);
 });
 
 auth.route('/mastodon/redirect').get(async (req, res) => {
-    const { code } = req.query;
-    //FIXME now we lost refernce to client_id and client_secret...
+    const baseURL = process.env.BASE_URL;
+    if (!baseURL) {
+        res.redirect(302, notify('120'));
+        return;
+    }
+
+    const { mclient_id, instance_url, code } = req.query;
+    const client_secret = authPending.get(mclient_id);
+    if (!mclient_id || !client_secret || !code) {
+        res.redirect(302, notify('111'));
+        return;
+    }
+
+    const access_token = await Mastodon.getAccessToken(
+        mclient_id,
+        client_secret,
+        code,
+        `https://${instance_url}`,
+        `${baseURL}/auth/mastodon/redirect?mclient_id=${mclient_id}&instance_url=${instance_url}`
+    );
+    console.log(access_token);
+    const M = new Mastodon({ access_token });
+    res.redirect(302, notify('011'));
+    // TODO
 });
 
 export default auth;
