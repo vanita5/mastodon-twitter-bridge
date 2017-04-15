@@ -5,10 +5,7 @@ import Title from './Title';
 const SubHeader = () => (
     <Row>
         <Col lg="2">
-            <img
-                className="img-responsive"
-                style={{ width: 120 }}
-                src="/static/img/mastodon.png"/>
+            <img className="img-responsive" style={{ width: 120 }} src="/static/img/mastodon.png" />
         </Col>
         <Col lg="10" style={{ padding: 10 }}>
             <Title />

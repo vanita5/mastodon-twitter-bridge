@@ -30,13 +30,11 @@ export default class Description extends React.PureComponent {
                 }
                 if (doc.service === 'twitter') {
                     this.setState({
-                        twitterAuthorized: doc.access_token &&
-                            doc.access_token.length > 0,
+                        twitterAuthorized: doc.access_token && doc.access_token.length > 0,
                     });
                 } else if (doc.service === 'mastodon') {
                     this.setState({
-                        mastodonAuthorized: doc.access_token &&
-                            doc.access_token.length > 0,
+                        mastodonAuthorized: doc.access_token && doc.access_token.length > 0,
                     });
                 }
             });

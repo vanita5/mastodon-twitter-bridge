@@ -10,9 +10,7 @@ type Props = {
     img: string,
 };
 
-const AuthorizeCard = (
-    { serviceName, authorized, authLink, backColor, img }: Props,
-) => (
+const AuthorizeCard = ({ serviceName, authorized, authLink, backColor, img }: Props) => (
     <Card style={style.card}>
         <div style={style.image(img, backColor)} className="card-img-top" />
         <CardBlock>

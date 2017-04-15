@@ -11,10 +11,7 @@ const Header = () => (
     <div id="header">
         <Row>
             <Col lg="12">
-                <img
-                    className="img-responsive"
-                    style={{ margin: '0 auto' }}
-                    src="/static/img/mastodon.png"/>
+                <img className="img-responsive" style={{ margin: '0 auto' }} src="/static/img/mastodon.png" />
             </Col>
         </Row>
         <Row style={{ marginTop: 25 }}>

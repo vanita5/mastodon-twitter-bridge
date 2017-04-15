@@ -12,15 +12,7 @@ app.prepare().then(() => {
     const server = express();
 
     server
-        .route([
-            '*.*',
-            '/_next*',
-            '/__webpack*',
-            '/',
-            '/index',
-            '/start',
-            '/about',
-        ])
+        .route(['*.*', '/_next*', '/__webpack*', '/', '/index', '/start', '/about'])
         .get((req, res) => handle(req, res));
 
     server.use('/auth', auth);

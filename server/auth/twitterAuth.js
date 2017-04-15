@@ -10,7 +10,7 @@ type RequestTokenResult = {
 export const requestToken = async (
     consumerKey: string,
     consumerSecret: string,
-    callbackUrl: string,
+    callbackUrl: string
 ): Promise<RequestTokenResult> => {
     const oauth = new OAuth(
         'https://twitter.com/oauth/request_token',
@@ -19,7 +19,7 @@ export const requestToken = async (
         consumerSecret,
         '1.0A',
         callbackUrl,
-        'HMAC-SHA1',
+        'HMAC-SHA1'
     );
 
     const {
@@ -51,7 +51,7 @@ export const accessToken = async (
     consumerSecret: string,
     reqToken: string,
     reqSecret: string,
-    verifier: string,
+    verifier: string
 ): Promise<AccessTokenResult> => {
     const oauth = new OAuth(
         'https://twitter.com/oauth/request_token',
@@ -60,23 +60,18 @@ export const accessToken = async (
         consumerSecret,
         '1.0A',
         null,
-        'HMAC-SHA1',
+        'HMAC-SHA1'
     );
     const {
         token,
         secret,
     } = await new Promise((resolve, reject) => {
-        oauth.getOAuthAccessToken(
-            reqToken,
-            reqSecret,
-            verifier,
-            (error, token, secret) => {
-                if (error) {
-                    reject();
-                }
-                resolve({ token, secret });
-            },
-        );
+        oauth.getOAuthAccessToken(reqToken, reqSecret, verifier, (error, token, secret) => {
+            if (error) {
+                reject();
+            }
+            resolve({ token, secret });
+        });
     });
     return {
         consumer_key: consumerKey,
