@@ -3,9 +3,9 @@
 import { Map } from 'immutable';
 import { accessToken as twitterAccessToken, requestToken as twitterRequestToken } from './twitterAuth';
 import express from 'express';
+import Mastodon from 'mastodon-api';
 import notify from '../notify';
 import Twit from 'twit';
-import Mastodon from 'mastodon-api';
 
 const auth = express.Router();
 
@@ -80,10 +80,11 @@ auth.route('/mastodon').get(async (req, res) => {
         client_id,
         client_secret,
         `https://${instanceUrl}`,
-        `read${ro ? '' : ' write follow'}`,
+        `read${ro ? '' : ' write'}`,
         `${baseURL}/auth/mastodon/redirect?mclient_id=${client_id}&instance_url=${instanceUrl}`
     );
     authPending = authPending.set(client_id, client_secret);
+    console.log(url);
     res.redirect(302, url);
 });
 
