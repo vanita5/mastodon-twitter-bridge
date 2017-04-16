@@ -3,12 +3,11 @@ import { Card, CardBlock, CardSubtitle, CardTitle } from 'reactstrap';
 
 type Props = {
     user: UserData,
-    right?: boolean,
 };
 
-const AccountCard = ({ user, right }: Props) => (
-    <Card style={style.card}>
-        <div style={style.image(user.backgroundImage, right)} className="card-img-top">
+const AccountCard = ({ user }: Props) => (
+    <Card className="text-center" style={style.card}>
+        <div style={style.image(user.backgroundImage)} className="card-img-top">
             <div style={style.avatar(user.profileImage)} />
         </div>
         <CardBlock>
@@ -27,7 +26,7 @@ const style = {
         width: 400,
         margin: '15px auto',
     },
-    image: (src, right) => ({
+    image: src => ({
         width: '100%',
         height: 200,
         backgroundImage: `url(${src})`,
@@ -38,7 +37,7 @@ const style = {
         flexDirection: 'row',
         padding: 20,
         alignItems: 'center',
-        justifyContent: right ? 'flex-end' : 'flex-start',
+        justifyContent: 'center',
     }),
     avatar: src => ({
         backgroundImage: `url(${src})`,

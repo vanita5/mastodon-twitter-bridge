@@ -27,7 +27,7 @@ Start.getInitialProps = async ({ query, req }: NextPageContext) => {
     if (req) {
         accounts = await api.getAccounts(req.session.user);
     } else {
-        const data = await fetch('http://localhost:3000/auth/accounts', {
+        const data = await fetch('/auth/accounts', {
             credentials: 'include',
         });
         accounts = await data.json();

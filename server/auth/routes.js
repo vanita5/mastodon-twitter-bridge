@@ -116,6 +116,7 @@ auth.route('/mastodon/redirect').get(async (req, res) => {
     await newAuth(req.session, 'mastodon', {
         access_token: accessToken,
         api_url: `https://${instance_url}/api/v1/`,
+        instance_url,
     });
     res.redirect(302, notify('011'));
 });

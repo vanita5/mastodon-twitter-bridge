@@ -2,17 +2,19 @@
 import type DataStore from 'nedb';
 import type NextApp from 'next';
 
-declare type AuthData =
-    | {
-          consumer_key: string,
-          consumer_secret: string,
-          access_token: string,
-          access_token_secret: string,
-      }
-    | {
-          access_token: string,
-          api_url: string,
-      };
+declare type TwitterAuthData = {
+    consumer_key: string,
+    consumer_secret: string,
+    access_token: string,
+    access_token_secret: string,
+};
+declare type MastodonAuthData = {
+    access_token: string,
+    api_url: string,
+    instance_url: string,
+};
+
+declare type AuthData = TwitterAuthData | MastodonAuthData;
 
 declare type UserData = {
     id: string,

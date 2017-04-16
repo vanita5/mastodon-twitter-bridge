@@ -21,16 +21,6 @@ export default class Description extends React.PureComponent {
         return (
             <div id="description">
                 <SubHeader />
-                <Row style={{ marginTop: 25 }}>
-                    <Col lg="6" xs="12">
-                        {twitterAccounts &&
-                            twitterAccounts.map((user, id) => <AccountCard key={id} user={user} />)}
-                    </Col>
-                    <Col lg="6" xs="12">
-                        {mastodonAccounts &&
-                            mastodonAccounts.map((user, id) => <AccountCard key={id} user={user} right />)}
-                    </Col>
-                </Row>
                 <Row style={{ marginTop: 50 }}>
                     <Col lg="6" xs="12">
                         <AuthorizeCard
@@ -46,6 +36,16 @@ export default class Description extends React.PureComponent {
                             backColor="#292326"
                             img="mastodon_card_logo.png"
                             allowCustomInstance/>
+                    </Col>
+                </Row>
+                <Row style={{ marginTop: 25 }}>
+                    <Col lg="6" xs="12">
+                        {twitterAccounts &&
+                            twitterAccounts.map((user, id) => <AccountCard key={id} user={user} />)}
+                    </Col>
+                    <Col lg="6" xs="12">
+                        {mastodonAccounts &&
+                            mastodonAccounts.map((user, id) => <AccountCard key={id} user={user} />)}
                     </Col>
                 </Row>
             </div>

@@ -1,9 +1,11 @@
 // @flow
+/* eslint camelcase: 0 */
 import Mastodon from 'mastodon-api';
 import Twit from 'twit';
 import UUID from 'uuid-js';
 
 export async function newAuth(session: any, type: 'twitter' | 'mastodon', auth: AuthData) {
+    // $FlowFixMe
     const userData = await (type === 'twitter' ? getTwitterUserData(auth) : getMastodonUserData(auth));
 
     let existingUser;
@@ -76,16 +78,19 @@ async function getTwitterUserData(auth: AuthData): Promise<?UserData> {
     };
 }
 
-async function getMastodonUserData(auth: AuthData): Promise<?UserData> {
-    const M = new Mastodon(auth);
-    const { data } = await M.get('account/verify_credentials', {});
+async function getMastodonUserData(auth: MastodonAuthData): Promise<?UserData> {
+    const M = new Mastodon({
+        api_url: auth.api_url,
+        access_token: auth.access_token,
+    });
+    const { data } = await M.get('accounts/verify_credentials', {});
     console.log('data', data);
     if (!data || data.errors) {
         return;
     }
     return {
-        name: data.display_name,
-        screenName: data.acct,
+        name: data.username,
+        screenName: `${data.acct}@${auth.instance_url}`,
         protected: data.locked,
         profileImage: data.avatar,
         backgroundImage: data.header,
