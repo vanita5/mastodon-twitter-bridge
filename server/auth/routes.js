@@ -1,7 +1,7 @@
 // @flow
 /* eslint camelcase: 0 */
+import { getAccounts, newAuth } from './success';
 import { Map } from 'immutable';
-import { newAuth } from './success';
 import { accessToken as twitterAccessToken, requestToken as twitterRequestToken } from './twitterAuth';
 import express from 'express';
 import Mastodon from 'mastodon-api';
@@ -10,6 +10,12 @@ import notify from '../notify';
 const auth = express.Router();
 
 let authPending: Map<string, string> = Map();
+
+auth.route('/accounts').get(async (req, res) => {
+    const id = req.session.user;
+    const accounts = await getAccounts(id);
+    res.json(accounts);
+});
 
 // twitter auth
 auth.route('/twitter').get(async (req, res) => {
@@ -107,7 +113,10 @@ auth.route('/mastodon/redirect').get(async (req, res) => {
         `https://${instance_url}`,
         `${baseURL}/auth/mastodon/redirect?mclient_id=${mclient_id}&instance_url=${instance_url}`
     );
-    await newAuth(req.session, 'mastodon', { access_token: accessToken });
+    await newAuth(req.session, 'mastodon', {
+        access_token: accessToken,
+        api_url: `https://${instance_url}/api/v1/`,
+    });
     res.redirect(302, notify('011'));
 });
 

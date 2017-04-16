@@ -1,4 +1,5 @@
 // @flow
+import { getAccounts } from './auth/success';
 import { middleware as sessionMiddleware } from './sessions';
 import auth from './auth/routes';
 import Datastore from 'nedb';
@@ -26,6 +27,9 @@ const handle = app.getRequestHandler();
 
 global.db = DB(db);
 global.app = app;
+global.api = {
+    getAccounts,
+};
 
 const initPromises = [app.prepare(), dbInit];
 

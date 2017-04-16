@@ -16,3 +16,13 @@ declare type NextPageContext = {
     jsonPageRes?: any,
     err?: any,
 };
+
+declare type Accounts =
+    | {
+          loggedIn: false,
+      }
+    | {
+          loggedIn: true,
+          mastodon: UserData[],
+          twitter: UserData[],
+      };
