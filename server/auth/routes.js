@@ -1,11 +1,11 @@
 // @flow
 /* eslint camelcase: 0 */
 import { Map } from 'immutable';
+import { newAuth } from './success';
 import { accessToken as twitterAccessToken, requestToken as twitterRequestToken } from './twitterAuth';
 import express from 'express';
 import Mastodon from 'mastodon-api';
 import notify from '../notify';
-import Twit from 'twit';
 
 const auth = express.Router();
 
@@ -50,10 +50,8 @@ auth.route('/twitter/redirect').get(async (req, res) => {
         reqSecret,
         oauth_verifier
     );
-    console.log(twitAuth);
-    const T = new Twit(twitAuth);
+    await newAuth(req.session, 'twitter', twitAuth);
     res.redirect(302, notify('010'));
-    //TODO do stuff
 });
 
 // mastodon auth
@@ -102,17 +100,15 @@ auth.route('/mastodon/redirect').get(async (req, res) => {
         return;
     }
 
-    const access_token = await Mastodon.getAccessToken(
+    const accessToken = await Mastodon.getAccessToken(
         mclient_id,
         client_secret,
         code,
         `https://${instance_url}`,
         `${baseURL}/auth/mastodon/redirect?mclient_id=${mclient_id}&instance_url=${instance_url}`
     );
-    console.log(access_token);
-    const M = new Mastodon({ access_token });
+    await newAuth(req.session, 'mastodon', { access_token: accessToken });
     res.redirect(302, notify('011'));
-    // TODO
 });
 
 export default auth;

@@ -10,6 +10,8 @@ module.exports = {
     globals: {
         __DEV__: false,
         __PROD__: false,
+        db: false,
+        app: false,
     },
     rules: {
         indent: [2, 4],

@@ -1,24 +1,42 @@
 // @flow
 import { middleware as sessionMiddleware } from './sessions';
 import auth from './auth/routes';
+import Datastore from 'nedb';
+import DB from './db';
 import express from 'express';
 import next from 'next';
+
+const db = new Datastore({
+    filename: 'db/users.db',
+});
+
+const dbInit = new Promise((resolve, reject) => {
+    db.loadDatabase(err => {
+        if (err) {
+            reject(err);
+        }
+        resolve();
+    });
+});
 
 const dev = process.env.NODE_ENV !== 'production';
 
 const app = next({ dev });
 const handle = app.getRequestHandler();
 
-app.prepare().then(() => {
+global.db = DB(db);
+global.app = app;
+
+const initPromises = [app.prepare(), dbInit];
+
+Promise.all(initPromises).then(() => {
     const server = express();
 
     server.use(sessionMiddleware);
 
-    server
-        .route(['*.*', '/_next*', '/__webpack*', '/', '/index', '/about', '/start'])
-        .get((req, res) => handle(req, res));
-
     server.use('/auth', auth);
+
+    server.route('*').get((req, res) => handle(req, res));
 
     server.listen(3000, err => {
         if (err) {

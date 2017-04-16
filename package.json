@@ -35,7 +35,8 @@
     "react-icon": "^1.0.0",
     "reactstrap": "^4.5.0",
     "sass-loader": "^6.0.3",
-    "twit": "^2.2.5"
+    "twit": "^2.2.5",
+    "uuid-js": "^0.7.5"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",

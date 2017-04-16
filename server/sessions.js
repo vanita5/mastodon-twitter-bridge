@@ -21,6 +21,6 @@ export const middleware = session({
     }),
     secret: 'keyboard cat',
     resave: false,
-    saveUninitialized: false,
-    cookie: { secure: true },
+    saveUninitialized: true,
+    cookie: { secure: false },
 });
