@@ -2,18 +2,19 @@
 import { Card, CardBlock, CardSubtitle, CardTitle } from 'reactstrap';
 
 type Props = {
-    user: UserData,
+    account: AccountData,
 };
 
-const AccountCard = ({ user }: Props) => (
+const AccountCard = ({ account }: Props) => (
     <Card className="text-center" style={style.card}>
-        <div style={style.image(user.backgroundImage)} className="card-img-top">
-            <div style={style.avatar(user.profileImage)} />
+        <div style={style.image(account.backgroundImage)} className="card-img-top">
+            <div style={style.avatar(account.profileImage)} />
         </div>
         <CardBlock>
-            <CardTitle>{user.name}</CardTitle>
+            <CardTitle>{account.name}</CardTitle>
             <CardSubtitle>
-                {`@${user.screenName}`}{!user.locked && <span className="fa fa-ock" style={style.lock} />}
+                {`@${account.screenName}`}
+                {account.protected && <span className="fa fa-lock" style={style.lock} />}
             </CardSubtitle>
         </CardBlock>
     </Card>

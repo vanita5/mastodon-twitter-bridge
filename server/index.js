@@ -1,10 +1,10 @@
 // @flow
-import { getAccounts } from './auth/success';
 import { middleware as sessionMiddleware } from './sessions';
 import auth from './auth/routes';
 import Datastore from 'nedb';
 import DB from './db';
 import express from 'express';
+import getUser from './api/getUser';
 import next from 'next';
 
 const db = new Datastore({
@@ -28,7 +28,7 @@ const handle = app.getRequestHandler();
 global.db = DB(db);
 global.app = app;
 global.api = {
-    getAccounts,
+    getUser,
 };
 
 const initPromises = [app.prepare(), dbInit];

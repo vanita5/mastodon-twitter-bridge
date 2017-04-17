@@ -14,9 +14,7 @@ declare type MastodonAuthData = {
     instance_url: string,
 };
 
-declare type AuthData = TwitterAuthData | MastodonAuthData;
-
-declare type UserData = {
+declare type AccountData = {
     id: string,
     name: string,
     screenName: string,
@@ -25,7 +23,31 @@ declare type UserData = {
     backgroundImage: string,
 };
 
-declare type User = { auth: AuthData, userData: UserData };
+declare type MastodonAccount = { auth: MastodonAuthData, userData: AccountData };
+declare type TwitterAccount = { auth: TwitterAuthData, userData: AccountData };
+
+declare type UserConfig = {
+    defaultMastodonInstance?: string,
+};
+
+declare type User = {
+    _id: string,
+    mastodon: MastodonAccount[],
+    twitter: TwitterAccount[],
+    config: UserConfig,
+    connections: any[], //TODO
+};
+
+declare type ClientUserConfig = {
+    defaultMastodonInstance: string,
+};
+
+declare type ClientUser = {
+    loggedIn: boolean,
+    mastodon: AccountData[],
+    twitter: AccountData[],
+    config: ClientUserConfig,
+};
 
 declare var db: DataStore;
 declare var app: NextApp;

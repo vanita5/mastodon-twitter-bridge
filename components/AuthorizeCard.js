@@ -12,20 +12,24 @@ import {
 } from 'reactstrap';
 
 type Props = {
+    hasAccount?: boolean,
     serviceName: string,
     authLink: string,
     backColor: string,
     img: string,
     allowCustomInstance?: boolean,
+    defaultInstance?: string,
 };
 
-const AuthorizeCard = ({ serviceName, authLink, backColor, img, allowCustomInstance }: Props) => (
+const AuthorizeCard = (
+    { serviceName, hasAccount, authLink, backColor, img, allowCustomInstance, defaultInstance }: Props
+) => (
     <Card style={style.card}>
         <div style={style.image(img, backColor)} className="card-img-top" />
         <CardBlock>
             <CardTitle>{serviceName}</CardTitle>
             <CardSubtitle>
-                {'Not yet connected.'}
+                {hasAccount ? `Add another ${serviceName} account` : `Connect a ${serviceName} account`}
             </CardSubtitle>
             <CardText>{`Please authorize with ${serviceName}.`}</CardText>
             <form action={authLink} method="get">
@@ -33,7 +37,7 @@ const AuthorizeCard = ({ serviceName, authLink, backColor, img, allowCustomInsta
                     {allowCustomInstance &&
                         <InputGroup size="sm">
                             <InputGroupAddon>Mastodon instance</InputGroupAddon>
-                            <Input name="instanceUrl" defaultValue="mastodon.social" />
+                            <Input name="instanceUrl" defaultValue={defaultInstance || 'mastodon.social'} />
                         </InputGroup>}
                 </div>
                 <div style={style.authRow}>

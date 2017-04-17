@@ -4,9 +4,18 @@ import Mastodon from 'mastodon-api';
 import Twit from 'twit';
 import UUID from 'uuid-js';
 
-export async function newAuth(session: any, type: 'twitter' | 'mastodon', auth: AuthData) {
-    // $FlowFixMe
-    const userData = await (type === 'twitter' ? getTwitterUserData(auth) : getMastodonUserData(auth));
+type NewAuthArgs =
+    | {
+          type: 'twitter',
+          auth: TwitterAuthData,
+      }
+    | {
+          type: 'mastodon',
+          auth: MastodonAuthData,
+      };
+
+export async function newAuth(session: any, n: NewAuthArgs) {
+    const userData = await (n.type === 'twitter' ? getTwitterUserData(n.auth) : getMastodonUserData(n.auth));
 
     let existingUser;
     if (session.user) {
@@ -16,15 +25,15 @@ export async function newAuth(session: any, type: 'twitter' | 'mastodon', auth: 
         });
     } else {
         existingUser = await db.findOne({
-            [`${type}.auth`]: {
-                $elemMatch: auth,
+            [`${n.type}.auth`]: {
+                $elemMatch: n.auth,
             },
         });
     }
 
     let userId;
 
-    const user = { auth, userData };
+    const user = { auth: n.auth, userData };
 
     if (existingUser) {
         userId = existingUser._id;
@@ -32,7 +41,10 @@ export async function newAuth(session: any, type: 'twitter' | 'mastodon', auth: 
             { _id: userId },
             {
                 $addToSet: {
-                    [type]: user,
+                    [n.type]: user,
+                },
+                $set: {
+                    'config.defaultMastodonInstance': n.type === 'mastodon' ? n.auth.instance_url : undefined,
                 },
             },
             {}
@@ -41,8 +53,11 @@ export async function newAuth(session: any, type: 'twitter' | 'mastodon', auth: 
         const newId = session.user || UUID.create().toString();
         await db.insert({
             _id: newId,
-            twitter: type === 'twitter' ? [user] : [],
-            mastodon: type === 'mastodon' ? [user] : [],
+            twitter: n.type === 'twitter' ? [user] : [],
+            mastodon: n.type === 'mastodon' ? [user] : [],
+            config: {
+                defaultMastodonInstance: n.type === 'mastodon' ? n.auth.instance_url : undefined,
+            },
             connections: [],
         });
         userId = newId;
@@ -62,7 +77,7 @@ export async function newAuth(session: any, type: 'twitter' | 'mastodon', auth: 
     }
 }
 
-async function getTwitterUserData(auth: AuthData): Promise<?UserData> {
+async function getTwitterUserData(auth: TwitterAuthData): Promise<?AccountData> {
     const T = new Twit(auth);
     const { data } = await T.get('account/verify_credentials', {});
     if (!data || data.errors) {
@@ -78,7 +93,7 @@ async function getTwitterUserData(auth: AuthData): Promise<?UserData> {
     };
 }
 
-async function getMastodonUserData(auth: MastodonAuthData): Promise<?UserData> {
+async function getMastodonUserData(auth: MastodonAuthData): Promise<?AccountData> {
     const M = new Mastodon({
         api_url: auth.api_url,
         access_token: auth.access_token,
@@ -95,22 +110,5 @@ async function getMastodonUserData(auth: MastodonAuthData): Promise<?UserData> {
         profileImage: data.avatar,
         backgroundImage: data.header,
         id: String(data.id),
-    };
-}
-
-export async function getAccounts(id?: string): Promise<Accounts> {
-    console.log(id);
-    if (!id) {
-        return { loggedIn: false };
-    }
-    const user = await db.findOne({ _id: id });
-    console.log(user);
-    if (!user) {
-        return { loggedIn: false };
-    }
-    return {
-        loggedIn: true,
-        mastodon: user.mastodon.map(a => a.userData),
-        twitter: user.twitter.map(a => a.userData),
     };
 }

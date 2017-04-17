@@ -1,9 +1,10 @@
 // @flow
 /* eslint camelcase: 0 */
-import { getAccounts, newAuth } from './success';
 import { Map } from 'immutable';
+import { newAuth } from './success';
 import { accessToken as twitterAccessToken, requestToken as twitterRequestToken } from './twitterAuth';
 import express from 'express';
+import getUser from '../api/getUser';
 import Mastodon from 'mastodon-api';
 import notify from '../notify';
 
@@ -13,7 +14,7 @@ let authPending: Map<string, string> = Map();
 
 auth.route('/accounts').get(async (req, res) => {
     const id = req.session.user;
-    const accounts = await getAccounts(id);
+    const accounts = await getUser(id);
     res.json(accounts);
 });
 
@@ -56,7 +57,7 @@ auth.route('/twitter/redirect').get(async (req, res) => {
         reqSecret,
         oauth_verifier
     );
-    await newAuth(req.session, 'twitter', twitAuth);
+    await newAuth(req.session, { type: 'twitter', auth: twitAuth });
     res.redirect(302, notify('010'));
 });
 
@@ -68,7 +69,15 @@ auth.route('/mastodon').get(async (req, res) => {
         return;
     }
 
-    const { ro, instanceUrl } = req.query;
+    const { ro } = req.query;
+
+    if (!req.query.instanceUrl || typeof req.query.instanceUrl !== 'string') {
+        res.redirect(302, notify('140'));
+        return;
+    }
+
+    const instanceUrl = req.query.instanceUrl.replace(/^https?:\/\//, '').replace(/\/$/, '');
+
     const { client_id, client_secret } = await Mastodon.createOAuthApp(
         `https://${instanceUrl}/api/v1/apps`,
         'mastodon-twitter-bridge',
@@ -113,11 +122,12 @@ auth.route('/mastodon/redirect').get(async (req, res) => {
         `https://${instance_url}`,
         `${baseURL}/auth/mastodon/redirect?mclient_id=${mclient_id}&instance_url=${instance_url}`
     );
-    await newAuth(req.session, 'mastodon', {
+    const mastAuth = {
         access_token: accessToken,
         api_url: `https://${instance_url}/api/v1/`,
         instance_url,
-    });
+    };
+    await newAuth(req.session, { type: 'mastodon', auth: mastAuth });
     res.redirect(302, notify('011'));
 });
 

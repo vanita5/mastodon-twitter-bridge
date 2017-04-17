@@ -7,8 +7,9 @@ import SubHeader from './SubHeader';
 
 type Props = {
     loggedIn: boolean,
-    twitterAccounts?: UserData[],
-    mastodonAccounts?: UserData[],
+    twitterAccounts: AccountData[],
+    mastodonAccounts: AccountData[],
+    defaultMastodonInstance: string,
 };
 
 export default class Description extends React.PureComponent {
@@ -16,36 +17,30 @@ export default class Description extends React.PureComponent {
     //db: DatabaseWrapper = new DatabaseWrapper();
 
     render() {
-        const { twitterAccounts, mastodonAccounts } = this.props;
-        console.log(twitterAccounts, mastodonAccounts);
+        const { twitterAccounts, mastodonAccounts, defaultMastodonInstance } = this.props;
         return (
             <div id="description">
                 <SubHeader />
                 <Row style={{ marginTop: 50 }}>
                     <Col lg="6" xs="12">
                         <AuthorizeCard
+                            hasAccount={twitterAccounts.length > 0}
                             serviceName="Twitter"
                             authLink="/auth/twitter"
                             backColor="#1da1f2"
                             img="twitter_card_logo.svg"/>
+                        {twitterAccounts.map(acc => <AccountCard key={acc.id} account={acc} />)}
                     </Col>
                     <Col lg="6" xs="12">
                         <AuthorizeCard
+                            hasAccount={mastodonAccounts.length > 0}
                             serviceName="Mastodon"
                             authLink="/auth/mastodon"
                             backColor="#292326"
                             img="mastodon_card_logo.png"
-                            allowCustomInstance/>
-                    </Col>
-                </Row>
-                <Row style={{ marginTop: 25 }}>
-                    <Col lg="6" xs="12">
-                        {twitterAccounts &&
-                            twitterAccounts.map((user, id) => <AccountCard key={id} user={user} />)}
-                    </Col>
-                    <Col lg="6" xs="12">
-                        {mastodonAccounts &&
-                            mastodonAccounts.map((user, id) => <AccountCard key={id} user={user} />)}
+                            allowCustomInstance
+                            defaultInstance={defaultMastodonInstance}/>
+                        {mastodonAccounts.map(acc => <AccountCard key={acc.id} account={acc} />)}
                     </Col>
                 </Row>
             </div>
