@@ -1,5 +1,5 @@
 // @flow
-import { middleware as sessionMiddleware } from './sessions';
+import { logout, middleware as sessionMiddleware } from './sessions';
 import auth from './auth/routes';
 import Datastore from 'nedb';
 import DB from './db';
@@ -27,7 +27,7 @@ const handle = app.getRequestHandler();
 
 global.db = DB(db);
 global.app = app;
-global.api = {
+global.serversideAPI = {
     getUser,
 };
 
@@ -39,6 +39,8 @@ Promise.all(initPromises).then(() => {
     server.use(sessionMiddleware);
 
     server.use('/auth', auth);
+
+    server.route('/logout').get((req, res) => logout(req, res));
 
     server.route('*').get((req, res) => handle(req, res));
 

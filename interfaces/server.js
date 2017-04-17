@@ -51,6 +51,6 @@ declare type ClientUser = {
 
 declare var db: DataStore;
 declare var app: NextApp;
-declare var api: {
+declare var serversideAPI: {
     [key: string]: Function,
 };

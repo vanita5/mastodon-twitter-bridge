@@ -1,4 +1,5 @@
 // @flow
+import api from '../lib/isoAPI';
 import Description from '../components/Description';
 import Layout from '../components/Layout';
 import Notification from '../components/Notification';
@@ -19,15 +20,8 @@ const Start = ({ code, loggedIn, mastodon, twitter, config }: Props) => (
 );
 
 Start.getInitialProps = async ({ query, req }: NextPageContext) => {
-    let user: ClientUser;
-    if (req) {
-        user = await api.getUser(req.session.user);
-    } else {
-        const data = await fetch('/auth/accounts', {
-            credentials: 'include',
-        });
-        user = await data.json();
-    }
+    const user = await api.getUser(req && req.session.user);
+
     return {
         ...user,
         code: query.notify !== undefined && NotificationCodes.all.hasOwnProperty(query.notify)

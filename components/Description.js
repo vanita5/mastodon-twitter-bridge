@@ -2,6 +2,7 @@
 import { Col, Row } from 'reactstrap';
 import AccountCard from './AccountCard';
 import AuthorizeCard from './AuthorizeCard';
+import Menu from './Menu';
 import React from 'react';
 import SubHeader from './SubHeader';
 
@@ -17,9 +18,10 @@ export default class Description extends React.PureComponent {
     //db: DatabaseWrapper = new DatabaseWrapper();
 
     render() {
-        const { twitterAccounts, mastodonAccounts, defaultMastodonInstance } = this.props;
+        const { twitterAccounts, mastodonAccounts, defaultMastodonInstance, loggedIn } = this.props;
         return (
             <div id="description">
+                <Menu loggedIn={loggedIn} />
                 <SubHeader />
                 <Row style={{ marginTop: 50 }}>
                     <Col lg="6" xs="12">

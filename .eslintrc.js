@@ -12,7 +12,7 @@ module.exports = {
         __PROD__: false,
         db: false,
         app: false,
-        api: false,
+        serversideAPI: false,
     },
     rules: {
         indent: [2, 4],

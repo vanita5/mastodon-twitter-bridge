@@ -22,7 +22,7 @@ const Header = () => (
         <Row style={{ marginTop: 100 }}>
             <Col lg="12">
                 <Button outline color="success" size="lg" style={buttonStyle}>
-                    <Link href="/start"><p>BUILD A BRIDGE</p></Link>
+                    <Link href="/accounts"><p>BUILD A BRIDGE</p></Link>
                 </Button>
             </Col>
         </Row>

@@ -24,3 +24,11 @@ export const middleware = session({
     saveUninitialized: true,
     cookie: { secure: false },
 });
+
+export async function logout(req: any, res: any) {
+    if (req.session && req.session.user) {
+        await new Promise(resolve => req.session.regenerate(() => resolve()));
+        await new Promise(resolve => req.session.save(() => resolve()));
+    }
+    res.redirect(302, '/');
+}
