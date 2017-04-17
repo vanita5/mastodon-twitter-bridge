@@ -51,7 +51,9 @@ export async function newAuth(req: any, res: any, n: NewAuthArgs) {
             {
                 $set: {
                     [`${n.type}.${accountData.id}`]: user,
-                    'config.defaultMastodonInstance': n.type === 'mastodon' ? n.auth.instance_url : undefined,
+                    'config.defaultMastodonInstance': n.type === 'mastodon'
+                        ? n.auth.instance_url
+                        : existingUser.config.defaultMastodonInstance,
                 },
             },
             {}
