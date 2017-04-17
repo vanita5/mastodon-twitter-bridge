@@ -57,8 +57,7 @@ auth.route('/twitter/redirect').get(async (req, res) => {
         reqSecret,
         oauth_verifier
     );
-    await newAuth(req.session, { type: 'twitter', auth: twitAuth });
-    res.redirect(302, notify('010'));
+    await newAuth(req, res, { type: 'twitter', auth: twitAuth });
 });
 
 // mastodon auth
@@ -127,8 +126,7 @@ auth.route('/mastodon/redirect').get(async (req, res) => {
         api_url: `https://${instance_url}/api/v1/`,
         instance_url,
     };
-    await newAuth(req.session, { type: 'mastodon', auth: mastAuth });
-    res.redirect(302, notify('011'));
+    await newAuth(req, res, { type: 'mastodon', auth: mastAuth });
 });
 
 export default auth;

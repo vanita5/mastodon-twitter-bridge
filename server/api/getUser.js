@@ -13,16 +13,17 @@ export default (async function getUser(id?: string): Promise<ClientUser> {
     if (!id) {
         return defaultUser;
     }
-    const user = await db.findOne({ _id: id });
-    console.log(user);
+    const user: ?User = await db.findOne({ _id: id });
     if (!user) {
         return defaultUser;
     }
 
     return {
         loggedIn: true,
-        mastodon: user.mastodon.map(a => a.userData),
-        twitter: user.twitter.map(a => a.userData),
-        config: user.config,
+        mastodon: Object.keys(user.mastodon).map(id => user.mastodon[id].accountData),
+        twitter: Object.keys(user.twitter).map(id => user.twitter[id].accountData),
+        config: {
+            defaultMastodonInstance: user.config.defaultMastodonInstance || 'mastodon.social',
+        },
     };
 });

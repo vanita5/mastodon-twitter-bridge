@@ -23,8 +23,8 @@ declare type AccountData = {
     backgroundImage: string,
 };
 
-declare type MastodonAccount = { auth: MastodonAuthData, userData: AccountData };
-declare type TwitterAccount = { auth: TwitterAuthData, userData: AccountData };
+declare type MastodonAccount = { auth: MastodonAuthData, accountData: AccountData };
+declare type TwitterAccount = { auth: TwitterAuthData, accountData: AccountData };
 
 declare type UserConfig = {
     defaultMastodonInstance?: string,
@@ -32,8 +32,8 @@ declare type UserConfig = {
 
 declare type User = {
     _id: string,
-    mastodon: MastodonAccount[],
-    twitter: TwitterAccount[],
+    mastodon: {| [id: string]: MastodonAccount |},
+    twitter: {| [id: string]: TwitterAccount |},
     config: UserConfig,
     connections: any[], //TODO
 };

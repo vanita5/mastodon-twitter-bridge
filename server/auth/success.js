@@ -1,6 +1,8 @@
 // @flow
 /* eslint camelcase: 0 */
+import crypto from 'crypto';
 import Mastodon from 'mastodon-api';
+import notify from '../notify';
 import Twit from 'twit';
 import UUID from 'uuid-js';
 
@@ -14,47 +16,52 @@ type NewAuthArgs =
           auth: MastodonAuthData,
       };
 
-export async function newAuth(session: any, n: NewAuthArgs) {
-    const userData = await (n.type === 'twitter' ? getTwitterUserData(n.auth) : getMastodonUserData(n.auth));
+export async function newAuth(req: any, res: any, n: NewAuthArgs) {
+    const accountData = await (n.type === 'twitter'
+        ? getTwitterAccountData(n.auth)
+        : getMastodonAccountData(n.auth));
+
+    if (!accountData) {
+        res.redirect(302, notify('112'));
+        return;
+    }
 
     let existingUser;
-    if (session.user) {
-        console.log(session);
+    if (req.session.user) {
+        console.log(req.session);
         existingUser = await db.findOne({
-            _id: session.user,
+            _id: req.session.user,
         });
     } else {
         existingUser = await db.findOne({
-            [`${n.type}.auth`]: {
-                $elemMatch: n.auth,
+            [`${n.type}.${accountData.id}`]: {
+                $exists: true,
             },
         });
     }
 
     let userId;
 
-    const user = { auth: n.auth, userData };
+    const user = { auth: n.auth, accountData };
 
     if (existingUser) {
         userId = existingUser._id;
         await db.update(
             { _id: userId },
             {
-                $addToSet: {
-                    [n.type]: user,
-                },
                 $set: {
+                    [`${n.type}.${accountData.id}`]: user,
                     'config.defaultMastodonInstance': n.type === 'mastodon' ? n.auth.instance_url : undefined,
                 },
             },
             {}
         );
     } else {
-        const newId = session.user || UUID.create().toString();
+        const newId = req.session.user || UUID.create().toString();
         await db.insert({
             _id: newId,
-            twitter: n.type === 'twitter' ? [user] : [],
-            mastodon: n.type === 'mastodon' ? [user] : [],
+            twitter: n.type === 'twitter' ? { [accountData.id]: user } : {},
+            mastodon: n.type === 'mastodon' ? { [accountData.id]: user } : {},
             config: {
                 defaultMastodonInstance: n.type === 'mastodon' ? n.auth.instance_url : undefined,
             },
@@ -63,10 +70,10 @@ export async function newAuth(session: any, n: NewAuthArgs) {
         userId = newId;
     }
 
-    if (!session.user && true) {
-        session.user = userId;
+    if (!req.session.user) {
+        req.session.user = userId;
         await new Promise((resolve, reject) => {
-            session.save(err => {
+            req.session.save(err => {
                 if (err) {
                     reject(err);
                 } else {
@@ -75,9 +82,12 @@ export async function newAuth(session: any, n: NewAuthArgs) {
             });
         });
     }
+
+    //success
+    res.redirect(302, notify(n.type === 'twitter' ? '010' : '011'));
 }
 
-async function getTwitterUserData(auth: TwitterAuthData): Promise<?AccountData> {
+async function getTwitterAccountData(auth: TwitterAuthData): Promise<?AccountData> {
     const T = new Twit(auth);
     const { data } = await T.get('account/verify_credentials', {});
     if (!data || data.errors) {
@@ -93,11 +103,14 @@ async function getTwitterUserData(auth: TwitterAuthData): Promise<?AccountData> 
     };
 }
 
-async function getMastodonUserData(auth: MastodonAuthData): Promise<?AccountData> {
+async function getMastodonAccountData(auth: MastodonAuthData): Promise<?AccountData> {
     const M = new Mastodon({
         api_url: auth.api_url,
         access_token: auth.access_token,
     });
+    const apiURLHash = crypto.createHash('sha1');
+    apiURLHash.update(auth.api_url, 'utf8');
+    const hashedApiURL = apiURLHash.digest('hex');
     const { data } = await M.get('accounts/verify_credentials', {});
     console.log('data', data);
     if (!data || data.errors) {
@@ -109,6 +122,6 @@ async function getMastodonUserData(auth: MastodonAuthData): Promise<?AccountData
         protected: data.locked,
         profileImage: data.avatar,
         backgroundImage: data.header,
-        id: String(data.id),
+        id: `${hashedApiURL}_${String(data.id)}`,
     };
 }
