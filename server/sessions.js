@@ -19,10 +19,14 @@ export const middleware = session({
         port: redisPort,
         db: redisDB ? parseInt(redisDB, 10) : undefined,
     }),
-    secret: 'keyboard cat',
+    secret: 'keyboard cat', //TODO Does this have to be changed?
     resave: false,
+    unset: 'destroy',
     saveUninitialized: true,
-    cookie: { secure: false },
+    cookie: {
+        secure: false,
+        maxAge: 1000 * 3600 * 24,
+    },
 });
 
 export async function logout(req: any, res: any) {
