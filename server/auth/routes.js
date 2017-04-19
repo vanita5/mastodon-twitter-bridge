@@ -1,6 +1,5 @@
 // @flow
 /* eslint camelcase: 0 */
-import { Map } from 'immutable';
 import { newAuth } from './success';
 import { accessToken as twitterAccessToken, requestToken as twitterRequestToken } from './twitterAuth';
 import express from 'express';
@@ -10,7 +9,11 @@ import notify from '../notify';
 
 const auth = express.Router();
 
-let authPending: Map<string, string> = Map();
+type PendingAuth = {
+    id: string,
+    secret: string,
+    permission: Permission,
+};
 
 auth.route('/accounts').get(async (req, res) => {
     const id = req.session.user;
@@ -34,7 +37,12 @@ auth.route('/twitter').get(async (req, res) => {
         Boolean(ro),
         `${baseURL}/auth/twitter/redirect`
     );
-    authPending = authPending.set(token, secret);
+    req.session.auth = {
+        secret,
+        id: token,
+        permission: ro ? 0 : 1,
+    };
+    await new Promise(resolve => req.session.save(() => resolve()));
     res.redirect(302, url);
 });
 auth.route('/twitter/redirect').get(async (req, res) => {
@@ -49,15 +57,23 @@ auth.route('/twitter/redirect').get(async (req, res) => {
         res.redirect(302, notify('110'));
         return;
     }
-    const reqSecret = authPending.get(oauth_token);
+    if (!req.session.auth) {
+        res.redirect(302, notify('113'));
+        return;
+    }
+    const pending: PendingAuth = req.session.auth;
+    if (pending.id !== oauth_token) {
+        res.redirect(302, notify('110'));
+        return;
+    }
     const twitAuth = await twitterAccessToken(
         consumerKey,
         consumerSecret,
         oauth_token,
-        reqSecret,
+        pending.secret,
         oauth_verifier
     );
-    await newAuth(req, res, { type: 'twitter', auth: twitAuth });
+    await newAuth(req, res, { type: 'twitter', auth: twitAuth, permission: pending.permission });
 });
 
 // mastodon auth
@@ -80,9 +96,10 @@ auth.route('/mastodon').get(async (req, res) => {
     const { client_id, client_secret } = await Mastodon.createOAuthApp(
         `https://${instanceUrl}/api/v1/apps`,
         'mastodon-twitter-bridge',
-        `read${ro ? '' : ' write follow'}`,
+        `read${ro ? '' : ' write'}`,
         `${baseURL}/auth/mastodon/redirect`
     );
+
     if (!client_id || !client_secret) {
         res.redirect(302, notify('111'));
         return;
@@ -95,8 +112,12 @@ auth.route('/mastodon').get(async (req, res) => {
         `read${ro ? '' : ' write'}`,
         `${baseURL}/auth/mastodon/redirect?mclient_id=${client_id}&instance_url=${instanceUrl}`
     );
-    authPending = authPending.set(client_id, client_secret);
-    console.log(url);
+    req.session.auth = {
+        id: client_id,
+        secret: client_secret,
+        permission: ro ? 0 : 1,
+    };
+    await new Promise(resolve => req.session.save(() => resolve()));
     res.redirect(302, url);
 });
 
@@ -106,17 +127,25 @@ auth.route('/mastodon/redirect').get(async (req, res) => {
         res.redirect(302, notify('120'));
         return;
     }
+    if (!req.session.auth) {
+        res.redirect(302, notify('113'));
+        return;
+    }
 
     const { mclient_id, instance_url, code } = req.query;
-    const client_secret = authPending.get(mclient_id);
-    if (!mclient_id || !client_secret || !code) {
+    const pending: PendingAuth = req.session.auth;
+    if (pending.id !== mclient_id) {
+        res.redirect(302, notify('111'));
+        return;
+    }
+    if (!mclient_id || !code) {
         res.redirect(302, notify('111'));
         return;
     }
 
     const accessToken = await Mastodon.getAccessToken(
         mclient_id,
-        client_secret,
+        pending.secret,
         code,
         `https://${instance_url}`,
         `${baseURL}/auth/mastodon/redirect?mclient_id=${mclient_id}&instance_url=${instance_url}`
@@ -124,9 +153,13 @@ auth.route('/mastodon/redirect').get(async (req, res) => {
     const mastAuth = {
         access_token: accessToken,
         api_url: `https://${instance_url}/api/v1/`,
-        instance_url,
     };
-    await newAuth(req, res, { type: 'mastodon', auth: mastAuth });
+    await newAuth(req, res, {
+        type: 'mastodon',
+        auth: mastAuth,
+        instance_url,
+        permission: pending.permission,
+    });
 });
 
 export default auth;

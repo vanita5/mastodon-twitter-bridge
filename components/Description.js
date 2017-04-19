@@ -8,8 +8,8 @@ import SubHeader from './SubHeader';
 
 type Props = {
     loggedIn: boolean,
-    twitterAccounts: AccountData[],
-    mastodonAccounts: AccountData[],
+    twitterAccounts: TwitterAccountData[],
+    mastodonAccounts: MastodonAccountData[],
     defaultMastodonInstance: string,
 };
 
@@ -31,7 +31,9 @@ export default class Description extends React.PureComponent {
                             authLink="/auth/twitter"
                             backColor="#1da1f2"
                             img="twitter_card_logo.svg"/>
-                        {twitterAccounts.map(acc => <AccountCard key={acc.id} account={acc} />)}
+                        {twitterAccounts.map(acc => (
+                            <AccountCard key={acc.id} type="twitter" account={acc} />
+                        ))}
                     </Col>
                     <Col lg="6" xs="12">
                         <AuthorizeCard
@@ -42,7 +44,9 @@ export default class Description extends React.PureComponent {
                             img="mastodon_card_logo.png"
                             allowCustomInstance
                             defaultInstance={defaultMastodonInstance}/>
-                        {mastodonAccounts.map(acc => <AccountCard key={acc.id} account={acc} />)}
+                        {mastodonAccounts.map(acc => (
+                            <AccountCard key={acc.id} type="mastodon" account={acc} />
+                        ))}
                     </Col>
                 </Row>
             </div>

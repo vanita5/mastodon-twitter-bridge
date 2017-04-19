@@ -23,6 +23,6 @@ declare type Accounts =
       }
     | {
           loggedIn: true,
-          mastodon: AccountData[],
-          twitter: AccountData[],
+          mastodon: MastodonAccountData[],
+          twitter: TwitterAccountData[],
       };

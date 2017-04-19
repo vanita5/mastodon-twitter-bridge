@@ -1,20 +1,27 @@
 // @flow
 import { Card, CardBlock, CardSubtitle, CardTitle } from 'reactstrap';
 
-type Props = {
-    account: AccountData,
-};
+type Props =
+    | {
+          type: 'twitter',
+          account: TwitterAccountData,
+      }
+    | {
+          type: 'mastodon',
+          account: MastodonAccountData,
+      };
 
-const AccountCard = ({ account }: Props) => (
+const AccountCard = (p: Props) => (
     <Card className="text-center" style={style.card}>
-        <div style={style.image(account.backgroundImage)} className="card-img-top">
-            <div style={style.avatar(account.profileImage)} />
+        <div style={style.image(p.account.backgroundImage)} className="card-img-top">
+            <div style={style.avatar(p.account.profileImage)} />
         </div>
         <CardBlock>
-            <CardTitle>{account.name}</CardTitle>
+            <CardTitle>{p.account.name}</CardTitle>
             <CardSubtitle>
-                {`@${account.screenName}`}
-                {account.protected && <span className="fa fa-lock" style={style.lock} />}
+                {`@${p.account.screenName}`}
+                {p.type === 'mastodon' && <span style={style.instance}>{`@${p.account.instanceUrl}`}</span>}
+                {p.account.protected && <span className="fa fa-lock" style={style.lock} />}
             </CardSubtitle>
         </CardBlock>
     </Card>
@@ -53,5 +60,10 @@ const style = {
     }),
     lock: {
         marginLeft: 5,
+    },
+    instance: {
+        //fontStyle: 'italic',
+        fontWeight: 'lighter',
+        color: '#aaa',
     },
 };

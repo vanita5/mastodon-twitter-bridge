@@ -2,6 +2,11 @@
 import type DataStore from 'nedb';
 import type NextApp from 'next';
 
+type PermissionRead = 0;
+type PermissionWrite = 1;
+
+declare type Permission = PermissionRead | PermissionWrite;
+
 declare type TwitterAuthData = {
     consumer_key: string,
     consumer_secret: string,
@@ -11,20 +16,31 @@ declare type TwitterAuthData = {
 declare type MastodonAuthData = {
     access_token: string,
     api_url: string,
-    instance_url: string,
 };
 
-declare type AccountData = {
+declare type TwitterAccountData = {
     id: string,
     name: string,
     screenName: string,
     protected: boolean,
     profileImage: string,
     backgroundImage: string,
+    permission: Permission,
 };
 
-declare type MastodonAccount = { auth: MastodonAuthData, accountData: AccountData };
-declare type TwitterAccount = { auth: TwitterAuthData, accountData: AccountData };
+declare type MastodonAccountData = {
+    id: string,
+    name: string,
+    screenName: string,
+    protected: boolean,
+    profileImage: string,
+    backgroundImage: string,
+    instanceUrl: string,
+    permission: Permission,
+};
+
+declare type MastodonAccount = { auth: MastodonAuthData, accountData: MastodonAccountData };
+declare type TwitterAccount = { auth: TwitterAuthData, accountData: TwitterAccountData };
 
 declare type UserConfig = {
     defaultMastodonInstance?: string,
@@ -44,8 +60,8 @@ declare type ClientUserConfig = {
 
 declare type ClientUser = {
     loggedIn: boolean,
-    mastodon: AccountData[],
-    twitter: AccountData[],
+    mastodon: MastodonAccountData[],
+    twitter: TwitterAccountData[],
     config: ClientUserConfig,
 };
 

@@ -10,16 +10,19 @@ type NewAuthArgs =
     | {
           type: 'twitter',
           auth: TwitterAuthData,
+          permission: Permission,
       }
     | {
           type: 'mastodon',
           auth: MastodonAuthData,
+          permission: Permission,
+          instance_url: string,
       };
 
 export async function newAuth(req: any, res: any, n: NewAuthArgs) {
     const accountData = await (n.type === 'twitter'
-        ? getTwitterAccountData(n.auth)
-        : getMastodonAccountData(n.auth));
+        ? getTwitterAccountData(n.auth, n.permission)
+        : getMastodonAccountData(n.auth, n.permission, n.instance_url));
 
     if (!accountData) {
         res.redirect(302, notify('112'));
@@ -52,7 +55,7 @@ export async function newAuth(req: any, res: any, n: NewAuthArgs) {
                 $set: {
                     [`${n.type}.${accountData.id}`]: user,
                     'config.defaultMastodonInstance': n.type === 'mastodon'
-                        ? n.auth.instance_url
+                        ? n.instance_url
                         : existingUser.config.defaultMastodonInstance,
                 },
             },
@@ -65,7 +68,7 @@ export async function newAuth(req: any, res: any, n: NewAuthArgs) {
             twitter: n.type === 'twitter' ? { [accountData.id]: user } : {},
             mastodon: n.type === 'mastodon' ? { [accountData.id]: user } : {},
             config: {
-                defaultMastodonInstance: n.type === 'mastodon' ? n.auth.instance_url : undefined,
+                defaultMastodonInstance: n.type === 'mastodon' ? n.instance_url : undefined,
             },
             connections: [],
         });
@@ -89,7 +92,10 @@ export async function newAuth(req: any, res: any, n: NewAuthArgs) {
     res.redirect(302, notify(n.type === 'twitter' ? '010' : '011'));
 }
 
-async function getTwitterAccountData(auth: TwitterAuthData): Promise<?AccountData> {
+async function getTwitterAccountData(
+    auth: TwitterAuthData,
+    permission: Permission
+): Promise<?TwitterAccountData> {
     const T = new Twit(auth);
     const { data } = await T.get('account/verify_credentials', {});
     if (!data || data.errors) {
@@ -101,15 +107,17 @@ async function getTwitterAccountData(auth: TwitterAuthData): Promise<?AccountDat
         protected: data.protected,
         profileImage: data.profile_image_url_https.replace('_normal.', '.'),
         backgroundImage: data.profile_banner_url,
+        permission,
         id: data.id_str,
     };
 }
 
-async function getMastodonAccountData(auth: MastodonAuthData): Promise<?AccountData> {
-    const M = new Mastodon({
-        api_url: auth.api_url,
-        access_token: auth.access_token,
-    });
+async function getMastodonAccountData(
+    auth: MastodonAuthData,
+    permission: Permission,
+    instanceUrl: string
+): Promise<?MastodonAccountData> {
+    const M = new Mastodon(auth);
     const apiURLHash = crypto.createHash('sha1');
     apiURLHash.update(auth.api_url, 'utf8');
     const hashedApiURL = apiURLHash.digest('hex');
@@ -120,7 +128,9 @@ async function getMastodonAccountData(auth: MastodonAuthData): Promise<?AccountD
     }
     return {
         name: data.username,
-        screenName: `${data.acct}@${auth.instance_url}`,
+        screenName: `${data.acct}`,
+        permission,
+        instanceUrl,
         protected: data.locked,
         profileImage: data.avatar,
         backgroundImage: data.header,
