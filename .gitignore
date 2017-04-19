@@ -6,6 +6,9 @@ node_modules/
 build/
 db/*
 
+# Redis dump files
+*.rdb
+
 .env
 
 .DS_Store
