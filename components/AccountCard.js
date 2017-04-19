@@ -15,6 +15,11 @@ const AccountCard = (p: Props) => (
     <Card className="text-center" style={style.card}>
         <div style={style.image(p.account.backgroundImage)} className="card-img-top">
             <div style={style.avatar(p.account.profileImage)} />
+            <div style={style.delete}>
+                <a href="/remove">
+                    <i style={style.delete.i} className="fa fa-trash-o" />
+                </a>
+            </div>
         </div>
         <CardBlock>
             <CardTitle>{p.account.name}</CardTitle>
@@ -58,6 +63,20 @@ const style = {
         borderRadius: 4,
         boxShadow: '0px 0px 20px 0px rgba(0,0,0,0.75)',
     }),
+    delete: {
+        backgroundColor: 'rgba(255, 255, 255, 0.5)',
+        width: 25,
+        height: 25,
+        position: 'absolute',
+        top: 0,
+        right: 0,
+        margin: 15,
+        borderRadius: '50%',
+        cursor: 'pointer',
+        i: {
+            color: 'black',
+        },
+    },
     lock: {
         marginLeft: 5,
     },
