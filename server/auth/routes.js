@@ -162,4 +162,24 @@ auth.route('/mastodon/redirect').get(async (req, res) => {
     });
 });
 
+auth.route('/remove').get(async (req, res) => {
+    const { id, type } = req.query;
+
+    if (!req.session.user) {
+        res.redirect(113, notify('113'));
+        return;
+    }
+
+    await db.update(
+        { _id: req.session.user },
+        {
+            $unset: {
+                [`${type}.${id}`]: true,
+            },
+        },
+        {}
+    );
+    res.redirect(302, notify(type === 'twitter' ? '020' : '021'));
+});
+
 export default auth;

@@ -16,7 +16,7 @@ const AccountCard = (p: Props) => (
         <div style={style.image(p.account.backgroundImage)} className="card-img-top">
             <div style={style.avatar(p.account.profileImage)} />
             <div style={style.delete}>
-                <a href="/remove">
+                <a href={`/auth/remove?id=${p.account.id}&type=${p.type}`}>
                     <i style={style.delete.i} className="fa fa-trash-o" />
                 </a>
             </div>
@@ -74,7 +74,7 @@ const style = {
         borderRadius: '50%',
         cursor: 'pointer',
         i: {
-            color: 'black',
+            color: '#be0000',
         },
     },
     lock: {
