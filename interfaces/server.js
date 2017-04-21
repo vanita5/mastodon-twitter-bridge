@@ -39,8 +39,14 @@ declare type MastodonAccountData = {
     permission: Permission,
 };
 
-declare type MastodonAccount = { auth: MastodonAuthData, accountData: MastodonAccountData };
-declare type TwitterAccount = { auth: TwitterAuthData, accountData: TwitterAccountData };
+declare type MastodonAccount = {
+    auth: MastodonAuthData,
+    accountData: MastodonAccountData,
+};
+declare type TwitterAccount = {
+    auth: TwitterAuthData,
+    accountData: TwitterAccountData,
+};
 
 declare type UserConfig = {
     defaultMastodonInstance?: string,
@@ -65,7 +71,7 @@ declare type ClientUser = {
     config: ClientUserConfig,
 };
 
-declare var db: DataStore;
+declare var db: PromiseDB;
 declare var app: NextApp;
 declare var serversideAPI: {
     [key: string]: Function,
