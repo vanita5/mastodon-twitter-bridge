@@ -1,9 +1,11 @@
 // @flow
 /* eslint camelcase: 0 */
 import { newAuth } from './success';
-import { accessToken as twitterAccessToken, requestToken as twitterRequestToken } from './twitterAuth';
+import {
+    accessToken as twitterAccessToken,
+    requestToken as twitterRequestToken,
+} from './twitterAuth';
 import express from 'express';
-import getUser from '../api/getUser';
 import Mastodon from 'mastodon-api';
 import notify from '../notify';
 
@@ -14,12 +16,6 @@ type PendingAuth = {
     secret: string,
     permission: Permission,
 };
-
-auth.route('/accounts').get(async (req, res) => {
-    const id = req.session.user;
-    const accounts = await getUser(id);
-    res.json(accounts);
-});
 
 // twitter auth
 auth.route('/twitter').get(async (req, res) => {
@@ -73,7 +69,11 @@ auth.route('/twitter/redirect').get(async (req, res) => {
         pending.secret,
         oauth_verifier
     );
-    await newAuth(req, res, { type: 'twitter', auth: twitAuth, permission: pending.permission });
+    await newAuth(req, res, {
+        type: 'twitter',
+        auth: twitAuth,
+        permission: pending.permission,
+    });
 });
 
 // mastodon auth
@@ -91,7 +91,9 @@ auth.route('/mastodon').get(async (req, res) => {
         return;
     }
 
-    const instanceUrl = req.query.instanceUrl.replace(/^https?:\/\//, '').replace(/\/$/, '');
+    const instanceUrl = req.query.instanceUrl
+        .replace(/^https?:\/\//, '')
+        .replace(/\/$/, '');
 
     const { client_id, client_secret } = await Mastodon.createOAuthApp(
         `https://${instanceUrl}/api/v1/apps`,
@@ -160,26 +162,6 @@ auth.route('/mastodon/redirect').get(async (req, res) => {
         instance_url,
         permission: pending.permission,
     });
-});
-
-auth.route('/remove').get(async (req, res) => {
-    const { id, type } = req.query;
-
-    if (!req.session.user) {
-        res.redirect(113, notify('113'));
-        return;
-    }
-
-    await db.update(
-        { _id: req.session.user },
-        {
-            $unset: {
-                [`${type}.${id}`]: true,
-            },
-        },
-        {}
-    );
-    res.redirect(302, notify(type === 'twitter' ? '020' : '021'));
 });
 
 export default auth;

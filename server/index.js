@@ -1,10 +1,10 @@
 // @flow
 import { logout, middleware as sessionMiddleware } from './sessions';
+import api, { apiObject } from './api/routes';
 import auth from './auth/routes';
 import Datastore from 'nedb';
 import DB from './db';
 import express from 'express';
-import getUser from './api/getUser';
 import next from 'next';
 
 const db = new Datastore({
@@ -27,9 +27,7 @@ const handle = app.getRequestHandler();
 
 global.db = DB(db);
 global.app = app;
-global.serversideAPI = {
-    getUser,
-};
+global.serversideAPI = apiObject;
 
 const initPromises = [app.prepare(), dbInit];
 
@@ -39,6 +37,7 @@ Promise.all(initPromises).then(() => {
     server.use(sessionMiddleware);
 
     server.use('/auth', auth);
+    server.use('/api', api);
 
     server.route('/logout').get((req, res) => logout(req, res));
 

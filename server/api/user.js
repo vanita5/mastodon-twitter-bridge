@@ -1,6 +1,6 @@
 // @flow
 
-export default (async function getUser(id?: string): Promise<ClientUser> {
+export async function getUser(id?: string): Promise<ClientUser> {
     const defaultUser = {
         loggedIn: false,
         mastodon: [],
@@ -26,4 +26,4 @@ export default (async function getUser(id?: string): Promise<ClientUser> {
             defaultMastodonInstance: user.config.defaultMastodonInstance || 'mastodon.social',
         },
     };
-});
+}
