@@ -2,14 +2,12 @@
 import { Col, Row } from 'reactstrap';
 import AccountCard from './AccountCard';
 import AuthorizeCard from './AuthorizeCard';
-import Menu from './Menu';
 import React from 'react';
 import SubHeader from './SubHeader';
 
 type Props = {
-    loggedIn: boolean,
-    twitterAccounts: TwitterAccountData[],
-    mastodonAccounts: MastodonAccountData[],
+    twitterAccounts: ClientTwitterAccount[],
+    mastodonAccounts: ClientMastodonAccount[],
     defaultMastodonInstance: string,
 };
 
@@ -17,10 +15,8 @@ const Description = ({
     twitterAccounts,
     mastodonAccounts,
     defaultMastodonInstance,
-    loggedIn,
 }: Props) => (
     <div id="description">
-        <Menu loggedIn={loggedIn} />
         <SubHeader />
         <Row style={{ marginTop: 50 }}>
             <Col lg="6" xs="12">

@@ -8,6 +8,7 @@ export async function getUser(id?: string): Promise<ClientUser> {
         config: {
             defaultMastodonInstance: 'mastodon.social',
         },
+        connections: [],
     };
     console.log(id);
     if (!id) {
@@ -20,10 +21,18 @@ export async function getUser(id?: string): Promise<ClientUser> {
 
     return {
         loggedIn: true,
-        mastodon: Object.keys(user.mastodon).map(id => user.mastodon[id].accountData),
-        twitter: Object.keys(user.twitter).map(id => user.twitter[id].accountData),
+        mastodon: Object.keys(user.mastodon).map(id => ({
+            ...user.mastodon[id].accountData,
+            type: 'mastodon',
+        })),
+        twitter: Object.keys(user.twitter).map(id => ({
+            ...user.twitter[id].accountData,
+            type: 'twitter',
+        })),
         config: {
-            defaultMastodonInstance: user.config.defaultMastodonInstance || 'mastodon.social',
+            defaultMastodonInstance: user.config.defaultMastodonInstance ||
+                'mastodon.social',
         },
+        connections: user.connections,
     };
 }

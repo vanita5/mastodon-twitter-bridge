@@ -6,6 +6,14 @@ declare module CSSModule {
 declare type ReactChild = React$Element<any>;
 declare type ReactChildren = ?(ReactChild | ReactChild[]);
 
+declare type Style = {
+    [key: string]: InlineStyle,
+};
+
+declare type StyleFX = {
+    [key: string]: (...any) => InlineStyle,
+};
+
 declare type NextPageContext = {
     pathname: string,
     query: {

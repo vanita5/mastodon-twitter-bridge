@@ -11,7 +11,10 @@ const Header = () => (
     <div id="header">
         <Row>
             <Col lg="12">
-                <img className="img-responsive" style={{ margin: '0 auto' }} src="/static/img/mastodon.png" />
+                <img
+                    className="img-responsive"
+                    style={{ margin: '0 auto' }}
+                    src="/static/img/mastodon.png"/>
             </Col>
         </Row>
         <Row style={{ marginTop: 25 }}>
@@ -22,7 +25,7 @@ const Header = () => (
         <Row style={{ marginTop: 100 }}>
             <Col lg="12">
                 <Button outline color="success" size="lg" style={buttonStyle}>
-                    <Link href="/accounts"><p>BUILD A BRIDGE</p></Link>
+                    <Link prefetch href="/accounts"><p>BUILD A BRIDGE</p></Link>
                 </Button>
             </Col>
         </Row>

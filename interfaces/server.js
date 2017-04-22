@@ -48,8 +48,18 @@ declare type TwitterAccount = {
     accountData: TwitterAccountData,
 };
 
+declare type ClientTwitterAccount = { type: 'twitter' } & TwitterAccountData;
+declare type ClientMastodonAccount = { type: 'mastodon' } & MastodonAccountData;
+declare type ClientAccount = ClientTwitterAccount | ClientMastodonAccount;
+
 declare type UserConfig = {
     defaultMastodonInstance?: string,
+};
+
+declare type Connection = {
+    source: string,
+    target: string,
+    settings: {},
 };
 
 declare type User = {
@@ -57,7 +67,7 @@ declare type User = {
     mastodon: {| [id: string]: MastodonAccount |},
     twitter: {| [id: string]: TwitterAccount |},
     config: UserConfig,
-    connections: any[], //TODO
+    connections: Connection[], //TODO
 };
 
 declare type ClientUserConfig = {
@@ -66,9 +76,10 @@ declare type ClientUserConfig = {
 
 declare type ClientUser = {
     loggedIn: boolean,
-    mastodon: MastodonAccountData[],
-    twitter: TwitterAccountData[],
+    mastodon: ClientMastodonAccount[],
+    twitter: ClientTwitterAccount[],
     config: ClientUserConfig,
+    connections: Connection[],
 };
 
 declare var db: PromiseDB;

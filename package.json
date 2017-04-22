@@ -47,6 +47,7 @@
     "eslint-config-marudor": "^4.2.0",
     "eslint-loader": "^1.7.1",
     "flow-bin": "^0.43.1",
+    "flow-inlinestyle": "^1.0.7",
     "nodemon": "^1.11.0"
   }
 }

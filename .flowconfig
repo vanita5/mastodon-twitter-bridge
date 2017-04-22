@@ -5,6 +5,7 @@
 
 [libs]
 interfaces/
+node_modules/flow-inlinestyle/index.js
 
 [options]
 esproposal.decorators=ignore
