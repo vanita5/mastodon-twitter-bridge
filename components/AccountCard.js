@@ -20,6 +20,7 @@ type Props = {
 type State = {
     isDeleted?: boolean,
     deletionOngoing?: { resolve: Function, reject: Function },
+    deletionError?: boolean,
 };
 
 export default class AccountCard extends PureComponent {
@@ -35,14 +36,22 @@ export default class AccountCard extends PureComponent {
             reject = rej;
         }).then(
             async () => {
-                await api.deleteAccount(account.id, type);
-                this.setState({
-                    isDeleted: true,
-                });
+                const res = await api.deleteAccount(account.id, type);
+                if (res.status === 200) {
+                    this.setState({
+                        isDeleted: true,
+                    });
+                } else {
+                    this.setState({
+                        deletionError: true,
+                        deletionOngoing: this.deletionPromise(),
+                    });
+                }
             },
             () => {
                 this.setState({
                     deletionOngoing: undefined,
+                    deletionError: false,
                 });
             }
         );
@@ -54,12 +63,13 @@ export default class AccountCard extends PureComponent {
             deletionOngoing: state.deletionOngoing
                 ? undefined
                 : this.deletionPromise(),
+            deletionError: false,
         }));
     };
 
     render() {
         const a = this.props.accountData;
-        const { isDeleted, deletionOngoing } = this.state;
+        const { isDeleted, deletionOngoing, deletionError } = this.state;
         if (isDeleted) {
             return null;
         }
@@ -79,6 +89,10 @@ export default class AccountCard extends PureComponent {
                 <div style={style.showContainer(Boolean(deletionOngoing))}>
                     {deletionOngoing &&
                         <div style={style.askDeletionBody}>
+                            {deletionError &&
+                                <span style={style.error}>
+                                    {'An error occured, please try again.'}
+                                </span>}
                             <span>{'Sure \'bout that?'}</span>
                             <span>
                                 {'This will also delete NaN Connections'}
@@ -193,7 +207,14 @@ const style = {
         margin: 5,
         cursor: 'pointer',
     },
+    error: {
+        color: '#be0000',
+        fontStyle: 'italic',
+        position: 'absolute',
+        top: 40,
+    },
     deleteIcon: {
+        padding: 5,
         cursor: 'pointer',
         color: '#be0000',
         zIndex: 3,
