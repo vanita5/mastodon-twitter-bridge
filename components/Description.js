@@ -33,9 +33,10 @@ const Description = ({
                 {twitterAccounts.map(acc => (
                     <AccountCard
                         key={acc.id}
-                        type="twitter"
-                        account={acc}
-                        onDelete={actions.reload}/>
+                        accountData={{
+                            type: 'twitter',
+                            account: acc,
+                        }}/>
                 ))}
             </Col>
             <Col lg="6" xs="12">
@@ -50,9 +51,10 @@ const Description = ({
                 {mastodonAccounts.map(acc => (
                     <AccountCard
                         key={acc.id}
-                        type="mastodon"
-                        account={acc}
-                        onDelete={actions.reload}/>
+                        accountData={{
+                            type: 'mastodon',
+                            account: acc,
+                        }}/>
                 ))}
             </Col>
         </Row>
@@ -60,11 +62,3 @@ const Description = ({
 );
 
 export default Description;
-
-const actions = {
-    reload: () => {
-        if (typeof location !== 'undefined') {
-            location.reload();
-        }
-    },
-};
