@@ -26,8 +26,12 @@ api
         }
         const userId = req.session.user;
         const con = req.body;
-        const status = await saveConnection(con, userId);
-        res.status(status).end();
+        const { status, connection } = await saveConnection(con, userId);
+        if (connection) {
+            res.json(connection).end();
+        } else {
+            res.status(status).end();
+        }
     })
     .delete(async (req, res) => {
         if (!req.session.user) {

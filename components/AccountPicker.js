@@ -64,6 +64,29 @@ export default class AccountPicker extends PureComponent {
     }
 }
 
+type AvatarProps = {
+    account: ClientAccount,
+};
+export const AccountAvatar = ({ account }: AvatarProps) => (
+    <div style={style.wrapper}>
+        <div style={styleFX.box(false, 1)}>
+            <AccountPickerAvatar url={account.profileImage} />
+        </div>
+        <div style={style.info}>
+            {account.type === 'twitter' && <span className="fa fa-twitter" />}
+            {account.type === 'mastodon' && <span style={style.mastodonIcon} />}
+            <span>
+                {`@${account.screenName}`}
+                {account.type === 'mastodon' &&
+                    <span style={style.instanceUrl}>
+                        {`@${account.instanceUrl}`}
+                    </span>}
+            </span>
+
+        </div>
+    </div>
+);
+
 const style: Style = {
     wrapper: {
         display: 'flex',

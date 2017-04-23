@@ -12,5 +12,5 @@ declare type PromiseDB = {
     findOne: (what: Object) => Promise<Object>,
     insert: <T: Object | Object[]>(what: T) => Promise<T>,
     count: (what: Object) => Promise<number>,
-    update: (what: Object, changes: Object, updateOptions: UpdateOptions) => Promise<number>,
+    update: (what: Object, changes: Object, updateOptions: UpdateOptions) => Promise<[number, ?Object]>,
 };

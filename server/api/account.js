@@ -1,10 +1,6 @@
 // @flow
 
-export async function deleteAccount(
-    accountId?: string,
-    type?: string,
-    userId?: string
-): Promise<number> {
+export async function deleteAccount(accountId?: string, type?: string, userId?: string): Promise<number> {
     if (
         !userId ||
         !accountId ||
@@ -15,7 +11,7 @@ export async function deleteAccount(
         return 400;
     }
 
-    const updatedRows = await db.update(
+    const [updatedRows] = await db.update(
         { _id: userId },
         {
             $unset: {

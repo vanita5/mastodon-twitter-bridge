@@ -1,33 +1,44 @@
 // @flow
+import { toClientUser } from '../converter/user';
 import UUID from 'uuid-js';
 
-export async function saveConnection(con?: $Shape<ClientConnection>, userId?: string): Promise<number> {
+export async function saveConnection(
+    con?: $Shape<ClientConnection>,
+    userId?: string
+): Promise<{ status: number, connection?: ClientConnection }> {
     if (!userId || !con || !(con.id || (con.target && con.source))) {
-        return 400;
+        return { status: 400 };
     }
 
     try {
         if (con.id) {
             if (con.id.indexOf('.') !== -1) {
-                return 400;
+                return { status: 400 };
             }
-            const updatedRows = await db.update(
+            const [updatedRows, updatedUser] = await db.update(
                 { _id: userId },
                 {
                     $set: {
                         [`${con.id}.settings`]: con.settings || {},
                     },
                 },
-                {}
+                { returnUpdatedDocs: true }
             );
-            return updatedRows > 0 ? 200 : 404;
+            //$FlowFixMe
+            const clientUser = toClientUser(updatedUser);
+            const connection = clientUser.connections.find(u => u.id === con.id);
+            console.log(clientUser, connection);
+            return {
+                status: updatedRows > 0 ? 200 : 404,
+                connection,
+            };
         }
         //assuming new
         if (typeof con.target.id !== 'string' || typeof con.source.id !== 'string') {
-            return 400;
+            return { status: 400 };
         }
         const newId = UUID.create().toString();
-        const updatedRows = await db.update(
+        const [updatedRows, updatedUser] = await db.update(
             { _id: userId },
             {
                 $set: {
@@ -42,11 +53,18 @@ export async function saveConnection(con?: $Shape<ClientConnection>, userId?: st
                     },
                 },
             },
-            {}
+            { returnUpdatedDocs: true }
         );
-        return updatedRows > 0 ? 200 : 404;
+        //$FlowFixMe
+        const clientUser = toClientUser(updatedUser);
+        const connection = clientUser.connections.find(u => u.id === newId);
+        console.log(clientUser, connection);
+        return {
+            status: updatedRows > 0 ? 200 : 404,
+            connection,
+        };
     } catch (e) {
-        return 500;
+        return { status: 500 };
     }
 }
 
@@ -55,7 +73,7 @@ export async function deleteConnection(userId?: string, conId: string): Promise<
         return 400;
     }
 
-    const updatedRows = await db.update(
+    const [updatedRows] = await db.update(
         { _id: userId },
         {
             $unset: {

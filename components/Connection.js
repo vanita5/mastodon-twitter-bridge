@@ -1,11 +1,12 @@
 // @flow
-import { Col, Row } from 'reactstrap';
+import { Button, Col, Row } from 'reactstrap';
 import { PureComponent } from 'react';
-import AccountPicker from './AccountPicker';
+import AccountPicker, { AccountAvatar } from './AccountPicker';
 
 type NewConnectionProps = {
     twitterAccounts: ClientTwitterAccount[],
     mastodonAccounts: ClientMastodonAccount[],
+    createConnection: $Shape<ClientConnection> => Promise<void>,
 };
 type State = {
     source?: ClientAccount,
@@ -25,6 +26,21 @@ export class NewConnection extends PureComponent {
             source,
             target: source && source !== state.target ? state.target : undefined,
         }));
+    };
+    handleCreate = () => {
+        const { createConnection } = this.props;
+        const { source, target } = this.state;
+        const connection = {
+            source,
+            target,
+        };
+        createConnection(connection).then(() => {
+            this.setState({
+                source: undefined,
+                target: undefined,
+                settings: {},
+            });
+        });
     };
     render() {
         const { twitterAccounts, mastodonAccounts } = this.props;
@@ -47,7 +63,13 @@ export class NewConnection extends PureComponent {
                     <div style={style.arrowWrap}>
                         <span style={style.arrow} className="fa fa-long-arrow-right" />
                     </div>
-                    <div style={style.settings} />
+                    {source &&
+                        target &&
+                        <div style={style.center}>
+                            <Button color="primary" onClick={this.handleCreate} style={style.saveButton}>
+                                {'Save'}
+                            </Button>
+                        </div>}
                 </Col>
                 <Col lg={5} style={style.picker}>
                     {source &&
@@ -61,13 +83,34 @@ export class NewConnection extends PureComponent {
     }
 }
 
+type ConnectionProps = {
+    source: ClientAccount,
+    target: ClientAccount,
+};
+export const ROConnection = ({ source, target }: ConnectionProps) => (
+    <Row style={style.connectionRow}>
+        <Col lg={5}>
+            <AccountAvatar account={source} />
+        </Col>
+        <Col lg={2} style={style.settingsCol}>
+            <div style={style.arrowWrap}>
+                <span style={style.arrow} className="fa fa-long-arrow-right" />
+            </div>
+        </Col>
+        <Col lg={5}>
+            <AccountAvatar account={target} />
+        </Col>
+    </Row>
+);
+export default ROConnection;
+
 const style = {
     connectionRow: {
         maxWidth: 600,
-        margin: 'auto',
+        margin: '80px auto 0 auto',
     },
     picker: {
-        zIndex: 1,
+        zIndex: 2,
     },
     settingsCol: {
         position: 'relative',
@@ -87,11 +130,15 @@ const style = {
         position: 'absolute',
         color: 'rgba(255, 255, 255, 0.2)',
     },
-    settings: {
+    saveButton: {
+        zIndex: 1,
+        cursor: 'pointer',
+    },
+    center: {
         display: 'flex',
         flexDirection: 'row',
-        alignItems: 'center',
+        alignItems: 'flex-end',
         justifyContent: 'center',
-        zIndex: 1,
+        height: '100%',
     },
 };
