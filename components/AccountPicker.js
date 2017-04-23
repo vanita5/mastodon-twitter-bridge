@@ -41,19 +41,24 @@ export default class AccountPicker extends PureComponent {
                                 onClick={this.toggle}/>)}
                     {selected &&
                         open &&
-                        <AccountPickerAvatar
-                            url={selected.profileImage}
-                            onClick={this.toggle}/>}
+                        <AccountPickerAvatar url={selected.profileImage} onClick={this.toggle} />}
                     {accounts.map(a => (
-                        <AccountPickerAvatar
-                            onClick={this.select(a)}
-                            url={a.profileImage}
-                            key={a.id}/>
+                        <AccountPickerAvatar onClick={this.select(a)} url={a.profileImage} key={a.id} />
                     ))}
                 </div>
-                {/* {!open && (
+                {selected &&
+                    <div style={style.info}>
+                        {selected.type === 'twitter' && <span className="fa fa-twitter" />}
+                        {selected.type === 'mastodon' && <span style={style.mastodonIcon} />}
+                        <span>
+                            {`@${selected.screenName}`}
+                            {selected.type === 'mastodon' &&
+                                <span style={style.instanceUrl}>
+                                    {`@${selected.instanceUrl}`}
+                                </span>}
+                        </span>
 
-                )} */}
+                    </div>}
             </div>
         );
     }
@@ -66,6 +71,21 @@ const style: Style = {
         alignItems: 'center',
         maxHeight: 104,
         overflow: 'visible',
+    },
+    info: {
+        marginTop: 10,
+        color: '#fff',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+    },
+    mastodonIcon: {
+        minHeight: 16,
+        width: 16,
+        backgroundImage: 'url(/static/img/mastodon.svg)',
+    },
+    instanceUrl: {
+        color: '#888',
     },
 };
 

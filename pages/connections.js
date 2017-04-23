@@ -9,10 +9,7 @@ type Props = { code?: NotificationCode } & ClientUser;
 
 const Connections = ({ loggedIn, mastodon, twitter, connections }: Props) => (
     <Layout loggedIn={loggedIn}>
-        <ConnectionBuilder
-            mastodonAccounts={mastodon}
-            twitterAccounts={twitter}
-            connections={connections}/>
+        <ConnectionBuilder mastodonAccounts={mastodon} twitterAccounts={twitter} connections={connections} />
     </Layout>
 );
 
@@ -23,8 +20,7 @@ Connections.getInitialProps = async ({ query, req }: NextPageContext) => {
 
     return {
         ...user,
-        code: query.notify !== undefined &&
-            NotificationCodes.all.hasOwnProperty(query.notify)
+        code: query.notify !== undefined && NotificationCodes.all.hasOwnProperty(query.notify)
             ? query.notify
             : undefined,
     };

@@ -5,19 +5,13 @@ import SubHeader from './SubHeader';
 type Props = {
     twitterAccounts: ClientTwitterAccount[],
     mastodonAccounts: ClientMastodonAccount[],
-    connections: Object[],
+    connections: ClientConnection[],
 };
-const ConnectionBuilder = ({
-    twitterAccounts,
-    mastodonAccounts,
-    connections,
-}: Props) => (
+const ConnectionBuilder = ({ twitterAccounts, mastodonAccounts, connections }: Props) => (
     <div>
         <SubHeader />
         <div style={style.newCon}>
-            <NewConnection
-                twitterAccounts={twitterAccounts}
-                mastodonAccounts={mastodonAccounts}/>
+            <NewConnection twitterAccounts={twitterAccounts} mastodonAccounts={mastodonAccounts} />
         </div>
         {connections.map(() => null)}
     </div>

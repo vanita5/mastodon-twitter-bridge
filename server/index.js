@@ -2,6 +2,7 @@
 import { logout, middleware as sessionMiddleware } from './sessions';
 import api, { apiObject } from './api/routes';
 import auth from './auth/routes';
+import bodyParser from 'body-parser';
 import Datastore from 'nedb';
 import DB from './db';
 import express from 'express';
@@ -35,6 +36,7 @@ Promise.all(initPromises).then(() => {
     const server = express();
 
     server.use(sessionMiddleware);
+    server.use(bodyParser.json());
 
     server.use('/auth', auth);
     server.use('/api', api);

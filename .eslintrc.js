@@ -22,7 +22,7 @@ module.exports = {
         'react/no-danger': 0,
         'no-empty-function': 0,
         'no-console': 0,
-        'max-len': [0, 110],
+        'max-len': [1, 110],
         'comma-dangle': [
             2,
             {

@@ -62,12 +62,19 @@ declare type Connection = {
     settings: {},
 };
 
+declare type ClientConnection = {
+    id: string,
+    source: ClientAccount,
+    target: ClientAccount,
+    settings: {},
+};
+
 declare type User = {
     _id: string,
     mastodon: {| [id: string]: MastodonAccount |},
     twitter: {| [id: string]: TwitterAccount |},
     config: UserConfig,
-    connections: Connection[], //TODO
+    connections: {| [id: string]: Connection |},
 };
 
 declare type ClientUserConfig = {
@@ -79,7 +86,7 @@ declare type ClientUser = {
     mastodon: ClientMastodonAccount[],
     twitter: ClientTwitterAccount[],
     config: ClientUserConfig,
-    connections: Connection[],
+    connections: ClientConnection[],
 };
 
 declare var db: PromiseDB;

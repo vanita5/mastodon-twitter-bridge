@@ -11,11 +11,7 @@ type Props = {
     defaultMastodonInstance: string,
 };
 
-const Description = ({
-    twitterAccounts,
-    mastodonAccounts,
-    defaultMastodonInstance,
-}: Props) => (
+const Description = ({ twitterAccounts, mastodonAccounts, defaultMastodonInstance }: Props) => (
     <div id="description">
         <SubHeader />
         <Row style={{ marginTop: 50 }}>

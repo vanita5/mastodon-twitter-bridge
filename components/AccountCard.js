@@ -60,9 +60,7 @@ export default class AccountCard extends PureComponent {
 
     handleDeleteIconClick = () => {
         this.setState((state: State) => ({
-            deletionOngoing: state.deletionOngoing
-                ? undefined
-                : this.deletionPromise(),
+            deletionOngoing: state.deletionOngoing ? undefined : this.deletionPromise(),
             deletionError: false,
         }));
     };
@@ -75,9 +73,7 @@ export default class AccountCard extends PureComponent {
         }
         return (
             <Card className="text-center" style={style.card}>
-                <div
-                    style={style.image(a.account.backgroundImage)}
-                    className="card-img-top">
+                <div style={style.image(a.account.backgroundImage)} className="card-img-top">
                     <div style={style.avatar(a.account.profileImage)} />
                     <div style={style.delete(Boolean(deletionOngoing))}>
                         <span
@@ -101,20 +97,12 @@ export default class AccountCard extends PureComponent {
                                 <Button
                                     style={style.askDelButton}
                                     color="danger"
-                                    onClick={
-                                        deletionOngoing
-                                            ? deletionOngoing.resolve
-                                            : undefined
-                                    }>
+                                    onClick={deletionOngoing ? deletionOngoing.resolve : undefined}>
                                     {'Yep'}
                                 </Button>
                                 <Button
                                     style={style.askDelButton}
-                                    onClick={
-                                        deletionOngoing
-                                            ? deletionOngoing.reject
-                                            : undefined
-                                    }>
+                                    onClick={deletionOngoing ? deletionOngoing.reject : undefined}>
                                     {'Nope'}
                                 </Button>
                             </div>
@@ -125,10 +113,8 @@ export default class AccountCard extends PureComponent {
                     <CardSubtitle>
                         {`@${a.account.screenName}`}
                         {a.type === 'mastodon' &&
-                            <span
-                                style={style.instance}>{`@${a.account.instanceUrl}`}</span>}
-                        {a.account.protected &&
-                            <span className="fa fa-lock" style={style.lock} />}
+                            <span style={style.instance}>{`@${a.account.instanceUrl}`}</span>}
+                        {a.account.protected && <span className="fa fa-lock" style={style.lock} />}
                     </CardSubtitle>
                 </CardBlock>
             </Card>

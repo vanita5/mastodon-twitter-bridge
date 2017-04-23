@@ -70,7 +70,7 @@ export async function newAuth(req: any, res: any, n: NewAuthArgs) {
             config: {
                 defaultMastodonInstance: n.type === 'mastodon' ? n.instance_url : undefined,
             },
-            connections: [],
+            connections: {},
         });
         userId = newId;
     }
