@@ -48,8 +48,6 @@ export default class AccountPicker extends PureComponent {
                 </div>
                 {selected &&
                     <div style={style.info}>
-                        {selected.type === 'twitter' && <span className="fa fa-twitter" />}
-                        {selected.type === 'mastodon' && <span style={style.mastodonIcon} />}
                         <span>
                             {`@${selected.screenName}`}
                             {selected.type === 'mastodon' &&
@@ -73,8 +71,6 @@ export const AccountAvatar = ({ account }: AvatarProps) => (
             <AccountPickerAvatar url={account.profileImage} />
         </div>
         <div style={style.info}>
-            {account.type === 'twitter' && <span className="fa fa-twitter" />}
-            {account.type === 'mastodon' && <span style={style.mastodonIcon} />}
             <span>
                 {`@${account.screenName}`}
                 {account.type === 'mastodon' &&
@@ -92,8 +88,8 @@ const style: Style = {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        maxHeight: 104,
         overflow: 'visible',
+        maxWidth: 104,
     },
     info: {
         marginTop: 10,
@@ -101,11 +97,6 @@ const style: Style = {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-    },
-    mastodonIcon: {
-        minHeight: 16,
-        width: 16,
-        backgroundImage: 'url(/static/img/mastodon.svg)',
     },
     instanceUrl: {
         color: '#888',

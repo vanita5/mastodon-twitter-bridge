@@ -37,7 +37,7 @@ export default class ConnectionBuilder extends PureComponent {
         const { twitterAccounts, mastodonAccounts, connections } = this.props;
         const { createdConnections } = this.state;
         return (
-            <div>
+            <div style={style.connections}>
                 <SubHeader />
                 <div style={style.newCon}>
                     <NewConnection
@@ -53,6 +53,11 @@ export default class ConnectionBuilder extends PureComponent {
 }
 
 const style = {
+    connections: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+    },
     newCon: {
         marginTop: 50,
         marginBottom: 150,
