@@ -9,9 +9,10 @@ type Props = {
     twitterAccounts: ClientTwitterAccount[],
     mastodonAccounts: ClientMastodonAccount[],
     defaultMastodonInstance: string,
+    connections: ClientConnection[],
 };
 
-const Description = ({ twitterAccounts, mastodonAccounts, defaultMastodonInstance }: Props) => (
+const Description = ({ twitterAccounts, mastodonAccounts, defaultMastodonInstance, connections }: Props) => (
     <div id="description">
         <SubHeader />
         <Row style={{ marginTop: 50 }}>
@@ -25,6 +26,7 @@ const Description = ({ twitterAccounts, mastodonAccounts, defaultMastodonInstanc
                 {twitterAccounts.map(acc => (
                     <AccountCard
                         key={acc.id}
+                        affectedConnections={helpers.affectedConnections(acc, connections)}
                         accountData={{
                             type: 'twitter',
                             account: acc,
@@ -43,6 +45,7 @@ const Description = ({ twitterAccounts, mastodonAccounts, defaultMastodonInstanc
                 {mastodonAccounts.map(acc => (
                     <AccountCard
                         key={acc.id}
+                        affectedConnections={helpers.affectedConnections(acc, connections)}
                         accountData={{
                             type: 'mastodon',
                             account: acc,
@@ -52,5 +55,10 @@ const Description = ({ twitterAccounts, mastodonAccounts, defaultMastodonInstanc
         </Row>
     </div>
 );
+
+const helpers = {
+    affectedConnections: (account: ClientAccount, connections) =>
+        connections.filter(c => c.target.id === account.id || c.source.id === account.id).length,
+};
 
 export default Description;

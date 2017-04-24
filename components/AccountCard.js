@@ -14,6 +14,7 @@ type CardAccount =
       };
 
 type Props = {
+    affectedConnections: number,
     accountData: CardAccount,
 };
 
@@ -67,6 +68,7 @@ export default class AccountCard extends PureComponent {
 
     render() {
         const a = this.props.accountData;
+        const { affectedConnections } = this.props;
         const { isDeleted, deletionOngoing, deletionError } = this.state;
         if (isDeleted) {
             return null;
@@ -90,8 +92,8 @@ export default class AccountCard extends PureComponent {
                                     {'An error occured, please try again.'}
                                 </span>}
                             <span>{'Sure \'bout that?'}</span>
-                            <span>
-                                {'This will also delete NaN Connections'}
+                            <span className="text-danger">
+                                {`This will delete ${affectedConnections} Connections!`}
                             </span>
                             <div style={style.deletionButtons}>
                                 <Button

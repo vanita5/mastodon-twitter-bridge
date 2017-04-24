@@ -32,11 +32,11 @@ export async function newAuth(req: any, res: any, n: NewAuthArgs) {
     let existingUser;
     if (req.session.user) {
         console.log(req.session);
-        existingUser = await db.findOne({
+        [existingUser] = await db.findOne({
             _id: req.session.user,
         });
     } else {
-        existingUser = await db.findOne({
+        [existingUser] = await db.findOne({
             [`${n.type}.${accountData.id}`]: {
                 $exists: true,
             },

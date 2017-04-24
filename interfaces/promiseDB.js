@@ -1,5 +1,4 @@
 // @flow
-/* eslint-disable */
 
 type UpdateOptions = {
     multi?: boolean,
@@ -7,10 +6,14 @@ type UpdateOptions = {
     returnUpdatedDocs?: boolean,
 };
 
-declare type PromiseDB = {
-    find: (what: Object) => Promise<Object[]>,
-    findOne: (what: Object) => Promise<Object>,
-    insert: <T: Object | Object[]>(what: T) => Promise<T>,
-    count: (what: Object) => Promise<number>,
-    update: (what: Object, changes: Object, updateOptions: UpdateOptions) => Promise<[number, ?Object]>,
+//query is typing hell, so Object has to suffice
+
+type DBQuery = Object;
+
+declare type PromiseDB<O> = {
+    find: (what: DBQuery) => Promise<[O[]]>,
+    findOne: (what: DBQuery) => Promise<[?O]>,
+    insert: <T: O | O[]>(what: T) => Promise<[T]>,
+    count: (what: DBQuery) => Promise<[number]>,
+    update: (what: DBQuery, changes: Object, updateOptions: UpdateOptions) => Promise<[number, ?O]>,
 };

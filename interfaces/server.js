@@ -89,7 +89,7 @@ declare type ClientUser = {
     connections: ClientConnection[],
 };
 
-declare var db: PromiseDB;
+declare var db: PromiseDB<User>;
 declare var app: NextApp;
 declare var serversideAPI: {
     [key: string]: Function,

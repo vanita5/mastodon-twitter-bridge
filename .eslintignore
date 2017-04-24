@@ -3,3 +3,4 @@ flow-typed/
 next.config.js
 postcss.config.js
 build/
+interfaces/

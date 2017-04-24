@@ -8,10 +8,11 @@ import type { NotificationCode } from '../lib/NotificationCodes';
 
 type Props = { code?: NotificationCode } & ClientUser;
 
-const Accounts = ({ code, loggedIn, mastodon, twitter, config }: Props) => (
+const Accounts = ({ code, loggedIn, mastodon, twitter, config, connections }: Props) => (
     <Layout loggedIn={loggedIn}>
         {code && <Notification code={code} />}
         <Description
+            connections={connections}
             mastodonAccounts={mastodon}
             twitterAccounts={twitter}
             defaultMastodonInstance={config.defaultMastodonInstance}/>
@@ -23,8 +24,7 @@ Accounts.getInitialProps = async ({ query, req }: NextPageContext) => {
 
     return {
         ...user,
-        code: query.notify !== undefined &&
-            NotificationCodes.all.hasOwnProperty(query.notify)
+        code: query.notify !== undefined && NotificationCodes.all.hasOwnProperty(query.notify)
             ? query.notify
             : undefined,
     };

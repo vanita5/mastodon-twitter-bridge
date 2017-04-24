@@ -15,7 +15,7 @@ export async function getUser(id?: string): Promise<ClientUser> {
     if (!id) {
         return defaultUser;
     }
-    const user: ?User = await db.findOne({ _id: id });
+    const [user] = await db.findOne({ _id: id });
     if (!user) {
         return defaultUser;
     }

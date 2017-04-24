@@ -10,11 +10,18 @@ export async function saveConnection(
         return { status: 400 };
     }
 
+    const [oldUser] = await db.findOne({ _id: userId });
+    if (!oldUser) {
+        return { status: 404 };
+    }
+    const oldClientUser = toClientUser(oldUser);
+
     try {
         if (con.id) {
             if (con.id.indexOf('.') !== -1) {
                 return { status: 400 };
             }
+            //TODO add check if changed settings make this connection equal to another one (fail then)
             const [updatedRows, updatedUser] = await db.update(
                 { _id: userId },
                 {
@@ -24,7 +31,9 @@ export async function saveConnection(
                 },
                 { returnUpdatedDocs: true }
             );
-            //$FlowFixMe
+            if (!updatedUser) {
+                return { status: 404 };
+            }
             const clientUser = toClientUser(updatedUser);
             const connection = clientUser.connections.find(u => u.id === con.id);
             console.log(clientUser, connection);
@@ -37,6 +46,17 @@ export async function saveConnection(
         if (typeof con.target.id !== 'string' || typeof con.source.id !== 'string') {
             return { status: 400 };
         }
+
+        //TODO add check for changed settings when relevant
+        if (
+            oldClientUser.connections.some(
+                c => c.source.id === con.source.id && c.target.id === con.target.id
+            )
+        ) {
+            return { status: 400 };
+            //TODO add clientside notification
+        }
+
         const newId = UUID.create().toString();
         const [updatedRows, updatedUser] = await db.update(
             { _id: userId },
@@ -55,7 +75,9 @@ export async function saveConnection(
             },
             { returnUpdatedDocs: true }
         );
-        //$FlowFixMe
+        if (!updatedUser) {
+            return { status: 404 };
+        }
         const clientUser = toClientUser(updatedUser);
         const connection = clientUser.connections.find(u => u.id === newId);
         console.log(clientUser, connection);
