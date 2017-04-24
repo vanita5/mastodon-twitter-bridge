@@ -89,7 +89,7 @@ type ConnectionProps = {
 };
 export const ROConnection = ({ source, target }: ConnectionProps) => (
     <Row style={style.connectionRow}>
-        <Col lg={5}>
+        <Col lg={5} style={style.avatar}>
             <AccountAvatar account={source} />
         </Col>
         <Col lg={2} style={style.settingsCol}>
@@ -97,7 +97,7 @@ export const ROConnection = ({ source, target }: ConnectionProps) => (
                 <span style={style.arrow} className="fa fa-long-arrow-right" />
             </div>
         </Col>
-        <Col lg={5}>
+        <Col lg={5} style={style.avatar}>
             <AccountAvatar account={target} />
         </Col>
     </Row>
@@ -111,6 +111,9 @@ const style = {
     },
     picker: {
         zIndex: 2,
+    },
+    avatar: {
+        zIndex: 1,
     },
     settingsCol: {
         position: 'relative',

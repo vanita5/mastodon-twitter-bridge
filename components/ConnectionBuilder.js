@@ -22,14 +22,12 @@ export default class ConnectionBuilder extends PureComponent {
         const prom = new Promise(async (resolve, reject) => {
             const { connection, status } = await api.saveConnection(con);
             if (connection && status === 200) {
-                resolve(connection);
+                this.setState((state: State) => ({
+                    createdConnections: [connection, ...state.createdConnections],
+                }));
             } else {
                 reject(`Connection saving failed, server response was${status}`);
             }
-        }).then((newCon: ClientConnection) => {
-            this.setState((state: State) => ({
-                createdConnections: [newCon, ...state.createdConnections],
-            }));
         });
 
         return prom;
